@@ -1,0 +1,10 @@
+default:
+    translation:
+        locale: en
+    formatters:
+        pretty: true
+    suites:
+      default:
+          paths:    [ tests/Behat/features ]
+          contexts: [ Behat\Bootstrap\DomainContext ]
+
