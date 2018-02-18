@@ -1,8 +1,7 @@
 <?php
 
-namespace App;
+namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
-use App\Messaging\MessagingBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
