@@ -44,16 +44,9 @@
             "Fixture\\": "tests/Fixture"
         }
     },
-    "replace": {
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php71": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php56": "*"
-    },
+    "replace": {},
     "scripts": {},
-    "conflict": {
-        "symfony/symfony": "*"
-    },
+    "conflict": {},
     "extra": {
         "symfony": {
             "id": "01C56X3EZ6WW81V2TXJCPWTNSG",
