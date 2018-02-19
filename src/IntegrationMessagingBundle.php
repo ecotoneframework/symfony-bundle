@@ -22,9 +22,8 @@ class IntegrationMessagingBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container->setAlias('doctrineEntityManager-proxy', 'doctrine.orm.default_entity_manager')->setPublic(true);
-
         $configurationObserver = ContainerConfiguratorForMessagingObserver::create();
-        $messagingSystemConfiguration = $this->configureMessaging($container, $configurationObserver);
+        $this->configureMessaging($container, $configurationObserver);
 
         foreach ($configurationObserver->getRequiredReferences() as $requiredReference) {
             $container->setAlias($requiredReference . '-proxy', $requiredReference)->setPublic(true);
@@ -40,7 +39,6 @@ class IntegrationMessagingBundle extends Bundle
             $container->setDefinition($interface, $definition);
         }
 
-        $this->buildMessagingSystemFrom($container, $messagingSystemConfiguration);
     }
 
 
@@ -49,7 +47,7 @@ class IntegrationMessagingBundle extends Bundle
         /** @var MessagingSystemConfiguration $messagingSystemConfiguration */
         $configurationObserver = new NullConfigurationObserver();
 
-        $this->buildMessagingSystemFrom($this->ontainer, $this->configureMessaging($this->container, $configurationObserver));
+        $this->buildMessagingSystemFrom($this->container, $this->configureMessaging($this->container, $configurationObserver));
     }
 
     /**
@@ -59,7 +57,7 @@ class IntegrationMessagingBundle extends Bundle
      */
     private function configureMessaging(Container $container, $configurationObserver): MessagingSystemConfiguration
     {
-        return SymfonyMessagingSystem::configure($container->getParameter('kernel.root_dir'), new VariableConfigurationRetrievingService($container), $configurationObserver);
+        return SymfonyMessagingSystem::configure($container->getParameter('messaging.application.context.namespace'), $container->getParameter('kernel.root_dir'), new VariableConfigurationRetrievingService($container), $configurationObserver);
     }
 
     /**
