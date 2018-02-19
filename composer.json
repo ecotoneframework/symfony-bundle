@@ -15,7 +15,7 @@
         "simplycodedsoftware/integration-messaging": "*",
         "simplycodedsoftware/integration-messaging-http": "*",
         "simplycodedsoftware/integration-messaging-cqrs": "*",
-        "symfony/framework-bundle": "~3.0|~4.0",
+        "symfony/framework-bundle": "^3.0|^4.0",
         "doctrine/doctrine-bundle": "^1.8.1"
     },
     "require-dev": {
