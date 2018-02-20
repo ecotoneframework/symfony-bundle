@@ -36,7 +36,7 @@ class IntegrationMessagingBundle extends Bundle
             $definition->setArgument(0, $referenceName);
             $definition->setArgument(1, new Reference('service_container'));
 
-            $container->setDefinition($interface, $definition);
+            $container->setDefinition($referenceName, $definition);
         }
 
     }
