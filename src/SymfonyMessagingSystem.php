@@ -33,8 +33,8 @@ class SymfonyMessagingSystem
                 new FileSystemClassLocator(
                     $annotationReader,
                     [
-                        $projectRootPath,
-                        $projectRootPath . DIRECTORY_SEPARATOR . "../vendor"
+                        realpath($projectRootPath . "/.."),
+                        realpath($projectRootPath . DIRECTORY_SEPARATOR . "../vendor")
                     ],
                     [
                         FileSystemClassLocator::SIMPLY_CODED_SOFTWARE_NAMESPACE,
