@@ -9,6 +9,7 @@ use SimplyCodedSoftware\IntegrationMessaging\Config\Annotation\DoctrineClassMeta
 use SimplyCodedSoftware\IntegrationMessaging\Config\Annotation\FileSystemClassLocator;
 use SimplyCodedSoftware\IntegrationMessaging\Config\ConfigurationObserver;
 use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Class SymfonyMessagingSystem
@@ -17,32 +18,26 @@ use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration
  */
 class SymfonyMessagingSystem
 {
-    public static function configure(string $messagingApplicationContextNamespace, string $projectRootPath, VariableConfigurationRetrievingService $variableConfigurationRetrievingService, ConfigurationObserver $configurationObserver): MessagingSystemConfiguration
+    public static function configure(Container $container, ConfigurationObserver $configurationObserver): MessagingSystemConfiguration
     {
+        $variableConfigurationRetrievingService = new VariableConfigurationRetrievingService($container);
         $annotationReader = new FileCacheReader(
             new AnnotationReader(),
             $variableConfigurationRetrievingService->get('kernel.cache_dir'),
-            $debug = true
+            $variableConfigurationRetrievingService->get("kernel.environment") == 'prod'
         );
-
 
         return MessagingSystemConfiguration::prepare(
             new AnnotationModuleConfigurationRetrievingService(
                 $variableConfigurationRetrievingService,
                 $configurationObserver,
-                new FileSystemClassLocator(
-                    $annotationReader,
-                    [
-                        realpath($projectRootPath . "/.."),
-                        realpath($projectRootPath . DIRECTORY_SEPARATOR . "../vendor")
-                    ],
-                    [
-                        FileSystemClassLocator::SIMPLY_CODED_SOFTWARE_NAMESPACE,
-                        FileSystemClassLocator::INTEGRATION_MESSAGING_NAMESPACE,
-                        $messagingApplicationContextNamespace
-                    ]
+                new ContainerClassLocator(
+                    $container, $annotationReader
                 ),
-                new DoctrineClassMetadataReader($annotationReader)
+                new ContainerClassMetadataReader(
+                    $container,
+                    new DoctrineClassMetadataReader($annotationReader)
+                )
             ),
             $variableConfigurationRetrievingService,
             $configurationObserver

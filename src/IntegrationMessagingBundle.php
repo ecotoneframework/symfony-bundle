@@ -38,7 +38,6 @@ class IntegrationMessagingBundle extends Bundle
 
             $container->setDefinition($referenceName, $definition);
         }
-
     }
 
 
@@ -57,7 +56,7 @@ class IntegrationMessagingBundle extends Bundle
      */
     private function configureMessaging(Container $container, $configurationObserver): MessagingSystemConfiguration
     {
-        return SymfonyMessagingSystem::configure($container->getParameter('messaging.application.context.namespace'), $container->getParameter('kernel.root_dir'), new VariableConfigurationRetrievingService($container), $configurationObserver);
+        return SymfonyMessagingSystem::configure($container, $configurationObserver);
     }
 
     /**
