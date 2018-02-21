@@ -38,7 +38,7 @@ class ContainerClassLocator implements ClassLocator
      */
     public function __construct(Container $container, Reader $annotationReader)
     {
-        $this->container = $container;
+        $this->container        = $container;
         $this->annotationReader = $annotationReader;
     }
 
@@ -59,6 +59,30 @@ class ContainerClassLocator implements ClassLocator
     }
 
     /**
+     * @return FileSystemClassLocator
+     */
+    private function fileSystemClassLocator(): FileSystemClassLocator
+    {
+        if (!$this->fileSystemClassLocator) {
+            $namespaces = array_merge([
+                FileSystemClassLocator::SIMPLY_CODED_SOFTWARE_NAMESPACE,
+                FileSystemClassLocator::INTEGRATION_MESSAGING_NAMESPACE
+            ], $this->container->getParameter('messaging.application.context.namespace'));
+
+            $this->fileSystemClassLocator = new FileSystemClassLocator(
+                $this->annotationReader,
+                [
+                    realpath($this->container->getParameter('kernel.root_dir') . "/.."),
+                    realpath($this->container->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . "../vendor")
+                ],
+                $namespaces
+            );
+        }
+
+        return $this->fileSystemClassLocator;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getAllClassesWithAnnotation(string $annotationName): array
@@ -74,28 +98,5 @@ class ContainerClassLocator implements ClassLocator
         $this->container->setParameter($key, $allClassesWithAnnotation);
 
         return $allClassesWithAnnotation;
-    }
-
-    /**
-     * @return FileSystemClassLocator
-     */
-    private function fileSystemClassLocator() : FileSystemClassLocator
-    {
-        if (!$this->fileSystemClassLocator) {
-            $this->fileSystemClassLocator =  new FileSystemClassLocator(
-                $this->annotationReader,
-                [
-                    realpath($this->container->getParameter('kernel.root_dir') . "/.."),
-                    realpath($this->container->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . "../vendor")
-                ],
-                [
-                    FileSystemClassLocator::SIMPLY_CODED_SOFTWARE_NAMESPACE,
-                    FileSystemClassLocator::INTEGRATION_MESSAGING_NAMESPACE,
-                    $this->container->getParameter('messaging.application.context.namespace')
-                ]
-            );
-        }
-
-        return $this->fileSystemClassLocator;
     }
 }
