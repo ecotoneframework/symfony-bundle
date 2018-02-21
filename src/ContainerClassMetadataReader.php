@@ -41,7 +41,7 @@ class ContainerClassMetadataReader implements ClassMetadataReader
      */
     public function getMethodsWithAnnotation(string $className, string $annotationName): array
     {
-        $key = "meta-data-" . str_replace("\\", ".", strtolower($className));
+        $key = "meta-data-" . str_replace("\\", ".", strtolower($className . $annotationName));
 
         if ($this->container->hasParameter($key)) {
             return $this->container->getParameter($key);
