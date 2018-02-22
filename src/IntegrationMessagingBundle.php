@@ -3,11 +3,14 @@
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
 use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration;
+use SimplyCodedSoftware\IntegrationMessaging\Handler\Enricher\ExpressionEvaluationService;
 use SimplyCodedSoftware\IntegrationMessaging\Handler\ReferenceSearchService;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -38,6 +41,25 @@ class IntegrationMessagingBundle extends Bundle
 
             $container->setDefinition($referenceName, $definition);
         }
+
+        $expressionLanguageCache = ExpressionEvaluationService::REFERENCE . "_cache";
+        $definition = new Definition();
+        $definition->setClass(FilesystemAdapter::class);
+        $definition->setArgument(0, "");
+        $definition->setArgument(1, "");
+        $definition->setArgument(2, $container->get('kernel.cache_dir'));
+        $this->container->set($expressionLanguageCache, $definition);
+
+        $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
+        $definition = new Definition();
+        $definition->setClass(ExpressionLanguage::class);
+        $definition->setArgument(0, new Reference($expressionLanguageCache));
+        $container->setDefinition($expressionLanguageAdapter, $definition);
+
+        $definition = new Definition();
+        $definition->setClass(ExpressionLanguageAdapter::class);
+        $definition->setArgument(0, new Reference($expressionLanguageAdapter));
+        $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
 
 

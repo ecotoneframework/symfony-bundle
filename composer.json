@@ -16,7 +16,8 @@
         "simplycodedsoftware/integration-messaging-http": "*",
         "simplycodedsoftware/integration-messaging-cqrs": "*",
         "symfony/framework-bundle": "^3.0|^4.0",
-        "doctrine/doctrine-bundle": "^1.8.1"
+        "doctrine/doctrine-bundle": "^1.8.1",
+        "symfony/expression-language": "3.0|4.0"
     },
     "require-dev": {
         "symfony/dotenv": "^4.0",
