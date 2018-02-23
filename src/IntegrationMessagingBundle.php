@@ -48,7 +48,7 @@ class IntegrationMessagingBundle extends Bundle
         $definition->setArgument(0, "");
         $definition->setArgument(1, "");
         $definition->setArgument(2, $container->getParameter('kernel.cache_dir'));
-        $this->container->set($expressionLanguageCache, $definition);
+        $container->setDefinition($expressionLanguageCache, $definition);
 
         $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
         $definition = new Definition();
