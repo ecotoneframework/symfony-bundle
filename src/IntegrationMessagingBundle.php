@@ -47,7 +47,7 @@ class IntegrationMessagingBundle extends Bundle
         $definition->setClass(FilesystemAdapter::class);
         $definition->setArgument(0, "");
         $definition->setArgument(1, "");
-        $definition->setArgument(2, $container->get('kernel.cache_dir'));
+        $definition->setArgument(2, $container->getParameter('kernel.cache_dir'));
         $this->container->set($expressionLanguageCache, $definition);
 
         $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
