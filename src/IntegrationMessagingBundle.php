@@ -2,6 +2,9 @@
 
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
+use SimplyCodedSoftware\IntegrationMessaging\Config\ConfiguredMessagingSystem;
+use SimplyCodedSoftware\IntegrationMessaging\Config\InMemoryChannelResolver;
+use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystem;
 use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration;
 use SimplyCodedSoftware\IntegrationMessaging\Handler\Enricher\ExpressionEvaluationService;
 use SimplyCodedSoftware\IntegrationMessaging\Handler\ReferenceSearchService;
@@ -28,18 +31,19 @@ class IntegrationMessagingBundle extends Bundle
         $configurationObserver = ContainerConfiguratorForMessagingObserver::create();
         $this->configureMessaging($container, $configurationObserver);
 
-        foreach ($configurationObserver->getRequiredReferences() as $requiredReference) {
-            $container->setAlias($requiredReference . '-proxy', $requiredReference)->setPublic(true);
-        }
-
         foreach ($configurationObserver->getRegisteredGateways() as $referenceName => $interface) {
             $definition = new Definition();
             $definition->setFactory([ProxyGenerator::class, 'createFor']);
             $definition->setClass($interface);
             $definition->setArgument(0, $referenceName);
             $definition->setArgument(1, new Reference('service_container'));
+            $definition->setArgument(2, $interface);
 
             $container->setDefinition($referenceName, $definition);
+        }
+
+        foreach ($configurationObserver->getRequiredReferences() as $requiredReference) {
+            $container->setAlias($requiredReference . '-proxy', $requiredReference)->setPublic(true);
         }
 
         $expressionLanguageCache = ExpressionEvaluationService::REFERENCE . "_cache";
@@ -66,7 +70,7 @@ class IntegrationMessagingBundle extends Bundle
     public function boot()
     {
         /** @var MessagingSystemConfiguration $messagingSystemConfiguration */
-        $configurationObserver = new NullConfigurationObserver();
+        $configurationObserver = new GatewayConfigurationObserver($this->container);
 
         $this->buildMessagingSystemFrom($this->container, $this->configureMessaging($this->container, $configurationObserver));
     }

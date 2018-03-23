@@ -4,6 +4,7 @@ namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
 use SimplyCodedSoftware\IntegrationMessaging\Config\ConfigurationObserver;
 use SimplyCodedSoftware\IntegrationMessaging\Config\ConfiguredMessagingSystem;
+use SimplyCodedSoftware\IntegrationMessaging\Config\GatewayReference;
 
 /**
  * Class ContainerConfiguratorForMessagingObserver
@@ -54,6 +55,14 @@ class ContainerConfiguratorForMessagingObserver implements ConfigurationObserver
     public function notifyGatewayBuilderWasRegistered(string $referenceName, string $gatewayType, string $interfaceName): void
     {
         $this->registeredGateways[$referenceName] = $interfaceName;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function notifyGatewayWasBuilt(GatewayReference $gatewayReference): void
+    {
+        return;
     }
 
     public function notifyMessageChannelWasRegistered(string $messageChannelName, string $channelType): void

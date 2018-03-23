@@ -18,7 +18,6 @@ class ProxyGenerator
      */
     public static function createFor(string $referenceName, ContainerInterface $container)
     {
-        $gatewayByName = $container->get('messaging_system')->getGatewayByName($referenceName);
-        return $gatewayByName;
+        return $container->get($referenceName);
     }
 }
