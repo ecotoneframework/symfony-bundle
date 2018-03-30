@@ -2,12 +2,11 @@
 
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
-use SimplyCodedSoftware\IntegrationMessaging\Config\ConfiguredMessagingSystem;
-use SimplyCodedSoftware\IntegrationMessaging\Config\InMemoryChannelResolver;
-use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystem;
+use SimplyCodedSoftware\IntegrationMessaging\Config\ConfigurationVariableRetrievingService;
 use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration;
-use SimplyCodedSoftware\IntegrationMessaging\Handler\Enricher\ExpressionEvaluationService;
+use SimplyCodedSoftware\IntegrationMessaging\Handler\ExpressionEvaluationService;
 use SimplyCodedSoftware\IntegrationMessaging\Handler\ReferenceSearchService;
+use SimplyCodedSoftware\IntegrationMessaging\Handler\SymfonyExpressionEvaluationAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -61,7 +60,8 @@ class IntegrationMessagingBundle extends Bundle
         $container->setDefinition($expressionLanguageAdapter, $definition);
 
         $definition = new Definition();
-        $definition->setClass(ExpressionLanguageAdapter::class);
+        $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
+        $definition->setFactory('createWithExternalExpressionLanguage');
         $definition->setArgument(0, new Reference($expressionLanguageAdapter));
         $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
@@ -86,8 +86,8 @@ class IntegrationMessagingBundle extends Bundle
     }
 
     /**
-     * @param Container $container
-     * @param MessagingSystemConfiguration $messagingSystemConfiguration
+     * @param Container                              $container
+     * @param MessagingSystemConfiguration           $messagingSystemConfiguration
      */
     private function buildMessagingSystemFrom(Container $container, MessagingSystemConfiguration $messagingSystemConfiguration): void
     {
@@ -111,7 +111,7 @@ class IntegrationMessagingBundle extends Bundle
             {
                 return $this->container->get($reference . '-proxy');
             }
-        });
+        }, new VariableConfigurationRetrievingService($container));
 
         $this->container->set('messaging_system', $messagingSystem);
     }

@@ -12,12 +12,12 @@
     "description": "Provides symfony integration to integration messaging",
     "require": {
         "php": "^7.1.3",
-        "simplycodedsoftware/integration-messaging": "*",
-        "simplycodedsoftware/integration-messaging-http": "*",
-        "simplycodedsoftware/integration-messaging-cqrs": "*",
-        "symfony/framework-bundle": "^3.0|^4.0",
+        "simplycodedsoftware/integration-messaging": "dev-master",
+        "simplycodedsoftware/integration-messaging-http": "dev-master",
+        "simplycodedsoftware/integration-messaging-cqrs": "dev-master",
+        "symfony/framework-bundle": "^3.3|^4.0",
         "doctrine/doctrine-bundle": "^1.8.1",
-        "symfony/expression-language": "^3.0|^4.0"
+        "ocramius/generated-hydrator": "^2.2.0"
     },
     "require-dev": {
         "symfony/dotenv": "^4.0",
@@ -47,11 +47,5 @@
     },
     "replace": {},
     "scripts": {},
-    "conflict": {},
-    "extra": {
-        "symfony": {
-            "id": "01C56X3EZ6WW81V2TXJCPWTNSG",
-            "allow-contrib": false
-        }
-    }
+    "conflict": {}
 }
