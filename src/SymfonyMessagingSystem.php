@@ -4,11 +4,8 @@ namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\FileCacheReader;
-use SimplyCodedSoftware\IntegrationMessaging\Config\Annotation\AnnotationModuleConfigurationRetrievingService;
 use SimplyCodedSoftware\IntegrationMessaging\Config\Annotation\AnnotationModuleRetrievingService;
-use SimplyCodedSoftware\IntegrationMessaging\Config\Annotation\DoctrineClassMetadataReader;
 use SimplyCodedSoftware\IntegrationMessaging\Config\Annotation\FileSystemAnnotationRegistrationService;
-use SimplyCodedSoftware\IntegrationMessaging\Config\Annotation\FileSystemClassLocator;
 use SimplyCodedSoftware\IntegrationMessaging\Config\ConfigurationObserver;
 use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration;
 use Symfony\Component\DependencyInjection\Container;
@@ -34,12 +31,17 @@ class SymfonyMessagingSystem
             $container->getParameter("kernel.environment") == 'prod'
         );
 
+        $namespaces = array_merge(
+            $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
+            [FileSystemAnnotationRegistrationService::SIMPLY_CODED_SOFTWARE_NAMESPACE, FileSystemAnnotationRegistrationService::INTEGRATION_MESSAGING_NAMESPACE]
+        );
+
         return MessagingSystemConfiguration::prepareWitObserver(
             new AnnotationModuleRetrievingService(
                 new FileSystemAnnotationRegistrationService(
                     $annotationReader,
                     realpath($container->getParameter('kernel.root_dir') . "/.."),
-                    $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
+                    $namespaces,
                     true
                 )
             ),

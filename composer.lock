@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ac3b5576a7c500d4c02a8e1c53d8fb0",
+    "content-hash": "4ca590f3123af8c129af221c79257893",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1565,12 +1565,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SimplyCodedSoftware/integration-messaging.git",
-                "reference": "5b33c7cc5cfafda5b3ab776c3e2677b3f336b09f"
+                "reference": "bb98acdec9ebf5fa569c21ce14e3eac6fbc684b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging/zipball/5b33c7cc5cfafda5b3ab776c3e2677b3f336b09f",
-                "reference": "5b33c7cc5cfafda5b3ab776c3e2677b3f336b09f",
+                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging/zipball/bb98acdec9ebf5fa569c21ce14e3eac6fbc684b1",
+                "reference": "bb98acdec9ebf5fa569c21ce14e3eac6fbc684b1",
                 "shasum": ""
             },
             "require": {
@@ -1614,7 +1614,7 @@
                 "messaging",
                 "spring"
             ],
-            "time": "2018-03-30T15:25:17+00:00"
+            "time": "2018-03-30T18:30:49+00:00"
         },
         {
             "name": "simplycodedsoftware/integration-messaging-cqrs",
@@ -1622,18 +1622,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SimplyCodedSoftware/integration-messaging-cqrs.git",
-                "reference": "542b2d29bb12e286323edb4682c68fc938c7d4af"
+                "reference": "1cb78976fcf938bfbbf2d9d9663e89aa5e2e3978"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging-cqrs/zipball/542b2d29bb12e286323edb4682c68fc938c7d4af",
-                "reference": "542b2d29bb12e286323edb4682c68fc938c7d4af",
+                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging-cqrs/zipball/1cb78976fcf938bfbbf2d9d9663e89aa5e2e3978",
+                "reference": "1cb78976fcf938bfbbf2d9d9663e89aa5e2e3978",
                 "shasum": ""
             },
             "require": {
-                "doctrine/orm": "^2.5|^2.6",
+                "doctrine/orm": "^2.5",
                 "php": ">=7.1.0",
-                "simplycodedsoftware/integration-messaging": "*"
+                "simplycodedsoftware/integration-messaging": "dev-master"
             },
             "require-dev": {
                 "behat/behat": "^3.3.1",
@@ -1669,7 +1669,7 @@
                 "separation",
                 "spring"
             ],
-            "time": "2018-03-23T11:52:10+00:00"
+            "time": "2018-03-30T19:09:10+00:00"
         },
         {
             "name": "simplycodedsoftware/integration-messaging-http",
@@ -1677,19 +1677,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SimplyCodedSoftware/integration-messaging-http.git",
-                "reference": "a725a5e160209c343462ebadabb668007ff29dd5"
+                "reference": "409b3730d894ff5d488d28e4761883531aa8d053"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging-http/zipball/a725a5e160209c343462ebadabb668007ff29dd5",
-                "reference": "a725a5e160209c343462ebadabb668007ff29dd5",
+                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging-http/zipball/409b3730d894ff5d488d28e4761883531aa8d053",
+                "reference": "409b3730d894ff5d488d28e4761883531aa8d053",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.4",
                 "php": ">=7.1.0",
                 "psr/http-message": "^1.0.1",
-                "simplycodedsoftware/integration-messaging": "*"
+                "simplycodedsoftware/integration-messaging": "dev-master"
             },
             "require-dev": {
                 "behat/behat": "^3.3.1",
@@ -1726,7 +1726,7 @@
                 "spring",
                 "web"
             ],
-            "time": "2018-03-30T16:55:13+00:00"
+            "time": "2018-03-30T19:21:21+00:00"
         },
         {
             "name": "symfony/cache",
