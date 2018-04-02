@@ -26,7 +26,6 @@ class IntegrationMessagingBundle extends Bundle
 
     public function build(ContainerBuilder $container)
     {
-        $container->setAlias('doctrineEntityManager-proxy', 'doctrine.orm.default_entity_manager')->setPublic(true);
         $configurationObserver = ContainerConfiguratorForMessagingObserver::create();
         $this->configureMessaging($container, $configurationObserver);
 
