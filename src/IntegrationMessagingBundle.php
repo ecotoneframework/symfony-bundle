@@ -60,7 +60,7 @@ class IntegrationMessagingBundle extends Bundle
 
         $definition = new Definition();
         $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
-        $definition->setFactory('createWithExternalExpressionLanguage');
+        $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
         $definition->setArgument(0, new Reference($expressionLanguageAdapter));
         $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
