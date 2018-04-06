@@ -36,6 +36,7 @@ class IntegrationMessagingBundle extends Bundle
             $definition->setArgument(0, $referenceName);
             $definition->setArgument(1, new Reference('service_container'));
             $definition->setArgument(2, $interface);
+            $definition->setPublic(true);
 
             $container->setDefinition($referenceName, $definition);
         }
@@ -62,6 +63,7 @@ class IntegrationMessagingBundle extends Bundle
         $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
         $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
         $definition->setArgument(0, new Reference($expressionLanguageAdapter));
+        $definition->setPublic(true);
         $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
 
