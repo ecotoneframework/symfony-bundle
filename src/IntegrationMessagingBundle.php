@@ -3,6 +3,7 @@
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
 use SimplyCodedSoftware\IntegrationMessaging\Config\ConfigurationVariableRetrievingService;
+use SimplyCodedSoftware\IntegrationMessaging\Config\ConfiguredMessagingSystem;
 use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration;
 use SimplyCodedSoftware\IntegrationMessaging\Handler\ExpressionEvaluationService;
 use SimplyCodedSoftware\IntegrationMessaging\Handler\ReferenceSearchService;
@@ -22,7 +23,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class IntegrationMessagingBundle extends Bundle
 {
-    const MESSAGING_SYSTEM_CONFIGURATION = 'messaging_system_configuration';
+    private const MESSAGING_SYSTEM_SERVICE_NAME = "messaging_system";
 
     public function build(ContainerBuilder $container)
     {
@@ -65,6 +66,24 @@ class IntegrationMessagingBundle extends Bundle
         $definition->setArgument(0, new Reference($expressionLanguageAdapter));
         $definition->setPublic(true);
         $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
+
+        $definition = new Definition();
+        $definition->setClass(ConfiguredMessagingSystem::class);
+        $definition->setSynthetic(true);
+        $definition->setPublic(true);
+        $container->setDefinition(self::MESSAGING_SYSTEM_SERVICE_NAME, $definition);
+
+        $definition = new Definition();
+        $definition->setClass(ListAllAsynchronousConsumersCommand::class);
+        $definition->setArgument(0, new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
+        $definition->addTag('console.command', array('command' => 'integration-messaging:list-all-async-consumers'));
+        $container->setDefinition(ListAllAsynchronousConsumersCommand::class, $definition);
+
+        $definition = new Definition();
+        $definition->setClass(RunAsynchronousConsumerCommand::class);
+        $definition->setArgument(0, new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
+        $definition->addTag('console.command', array('command' => 'integration-messaging:run-consumer'));
+        $container->setDefinition(RunAsynchronousConsumerCommand::class, $definition);
     }
 
 
@@ -114,6 +133,6 @@ class IntegrationMessagingBundle extends Bundle
             }
         }, new VariableConfigurationRetrievingService($container));
 
-        $this->container->set('messaging_system', $messagingSystem);
+        $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
     }
 }
