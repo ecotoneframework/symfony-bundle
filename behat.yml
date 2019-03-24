@@ -1,10 +1,20 @@
 default:
+    extensions:
+      Behat\Symfony2Extension:
+        kernel:
+          class: "SimplyCodedSoftware\\IntegrationMessaging\\Symfony\\Kernel"
     translation:
         locale: en
     formatters:
         pretty: true
     suites:
       default:
+          autoload:
+              '': "%paths.base%/app/autoload.php"
           paths:    [ tests/Behat/features ]
-          contexts: [ Behat\Bootstrap\DomainContext ]
+          type: symfony_bundle
+          bundle: IntegrationMessagingBundle
+          contexts:
+            - Behat\Bootstrap\DomainContext:
+                  carService: "@Fixture\\Car\\CarService"
 

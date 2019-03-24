@@ -2,12 +2,17 @@
 
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
-use SimplyCodedSoftware\IntegrationMessaging\Config\ConfigurationVariableRetrievingService;
-use SimplyCodedSoftware\IntegrationMessaging\Config\ConfiguredMessagingSystem;
-use SimplyCodedSoftware\IntegrationMessaging\Config\MessagingSystemConfiguration;
-use SimplyCodedSoftware\IntegrationMessaging\Handler\ExpressionEvaluationService;
-use SimplyCodedSoftware\IntegrationMessaging\Handler\ReferenceSearchService;
-use SimplyCodedSoftware\IntegrationMessaging\Handler\SymfonyExpressionEvaluationAdapter;
+use Doctrine\Common\Annotations\AnnotationReader;
+use SimplyCodedSoftware\Messaging\Config\Annotation\AnnotationModuleRetrievingService;
+use SimplyCodedSoftware\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
+use SimplyCodedSoftware\Messaging\Config\Configuration;
+use SimplyCodedSoftware\Messaging\Config\ConfiguredMessagingSystem;
+use SimplyCodedSoftware\Messaging\Config\GatewayReference;
+use SimplyCodedSoftware\Messaging\Config\MessagingSystemConfiguration;
+use SimplyCodedSoftware\Messaging\Config\ReferenceTypeFromNameResolver;
+use SimplyCodedSoftware\Messaging\Handler\ExpressionEvaluationService;
+use SimplyCodedSoftware\Messaging\Handler\ReferenceSearchService;
+use SimplyCodedSoftware\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,49 +28,14 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class IntegrationMessagingBundle extends Bundle
 {
-    private const MESSAGING_SYSTEM_SERVICE_NAME = "messaging_system";
+    const MESSAGING_SYSTEM_SERVICE_NAME = "messaging_system";
+    const MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME = "messaging_system_configuration";
 
     public function build(ContainerBuilder $container)
     {
-        $configurationObserver = ContainerConfiguratorForMessagingObserver::create();
-        $this->configureMessaging($container, $configurationObserver);
+        $container->addCompilerPass(new IntegrationMessagingCompilerPass());
 
-        foreach ($configurationObserver->getRegisteredGateways() as $referenceName => $interface) {
-            $definition = new Definition();
-            $definition->setFactory([ProxyGenerator::class, 'createFor']);
-            $definition->setClass($interface);
-            $definition->setArgument(0, $referenceName);
-            $definition->setArgument(1, new Reference('service_container'));
-            $definition->setArgument(2, $interface);
-            $definition->setPublic(true);
-
-            $container->setDefinition($referenceName, $definition);
-        }
-
-        foreach ($configurationObserver->getRequiredReferences() as $requiredReference) {
-            $container->setAlias($requiredReference . '-proxy', $requiredReference)->setPublic(true);
-        }
-
-        $expressionLanguageCache = ExpressionEvaluationService::REFERENCE . "_cache";
-        $definition = new Definition();
-        $definition->setClass(FilesystemAdapter::class);
-        $definition->setArgument(0, "");
-        $definition->setArgument(1, 0);
-        $definition->setArgument(2, $container->getParameter('kernel.cache_dir'));
-        $container->setDefinition($expressionLanguageCache, $definition);
-
-        $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
-        $definition = new Definition();
-        $definition->setClass(ExpressionLanguage::class);
-        $definition->setArgument(0, new Reference($expressionLanguageCache));
-        $container->setDefinition($expressionLanguageAdapter, $definition);
-
-        $definition = new Definition();
-        $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
-        $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
-        $definition->setArgument(0, new Reference($expressionLanguageAdapter));
-        $definition->setPublic(true);
-        $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
+        $this->setUpExpressionLanguage($container);
 
         $definition = new Definition();
         $definition->setClass(ConfiguredMessagingSystem::class);
@@ -89,25 +59,45 @@ class IntegrationMessagingBundle extends Bundle
 
     public function boot()
     {
-        /** @var MessagingSystemConfiguration $messagingSystemConfiguration */
-        $configurationObserver = new GatewayConfigurationObserver($this->container);
-
-        $this->buildMessagingSystemFrom($this->container, $this->configureMessaging($this->container, $configurationObserver));
+        $this->buildMessagingSystemFrom($this->container, unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)));
     }
 
     /**
      * @param Container $container
-     * @param $configurationObserver
-     * @return MessagingSystemConfiguration|SymfonyMessagingSystem
+     * @param ReferenceTypeFromNameResolver $referenceTypeFromNameResolver
+     * @return MessagingSystemConfiguration
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \SimplyCodedSoftware\Messaging\Config\ConfigurationException
+     * @throws \SimplyCodedSoftware\Messaging\MessagingException
      */
-    private function configureMessaging(Container $container, $configurationObserver): MessagingSystemConfiguration
+    private function configureMessaging(Container $container, ReferenceTypeFromNameResolver $referenceTypeFromNameResolver): Configuration
     {
-        return SymfonyMessagingSystem::configure($container, $configurationObserver);
+        $annotationReader = new AnnotationReader();
+
+        $namespaces = array_merge(
+            $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
+            [FileSystemAnnotationRegistrationService::SIMPLY_CODED_SOFTWARE_NAMESPACE, FileSystemAnnotationRegistrationService::INTEGRATION_MESSAGING_NAMESPACE]
+        );
+
+        return MessagingSystemConfiguration::prepareWithCachedReferenceObjects(
+            new AnnotationModuleRetrievingService(
+                new FileSystemAnnotationRegistrationService(
+                    $annotationReader,
+                    realpath($container->getParameter('kernel.root_dir') . "/.."),
+                    $namespaces,
+                    $container->getParameter("kernel.environment"),
+                    true
+                )
+            ),
+            $referenceTypeFromNameResolver
+        );
     }
 
     /**
-     * @param Container                              $container
-     * @param MessagingSystemConfiguration           $messagingSystemConfiguration
+     * @param Container $container
+     * @param MessagingSystemConfiguration $messagingSystemConfiguration
+     * @throws \SimplyCodedSoftware\Messaging\Endpoint\NoConsumerFactoryForBuilderException
+     * @throws \SimplyCodedSoftware\Messaging\MessagingException
      */
     private function buildMessagingSystemFrom(Container $container, MessagingSystemConfiguration $messagingSystemConfiguration): void
     {
@@ -127,12 +117,48 @@ class IntegrationMessagingBundle extends Bundle
                 $this->container = $container;
             }
 
-            public function findByReference(string $reference)
+            public function get(string $reference)
             {
                 return $this->container->get($reference . '-proxy');
             }
-        }, new VariableConfigurationRetrievingService($container));
+        });
 
         $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
+
+        /** @var GatewayReference $gateway */
+        foreach ($messagingSystem->getGatewayList() as $gateway) {
+            $this->container->set($gateway->getReferenceName(), $gateway->getGateway());
+        }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @return void
+     */
+    private function setUpExpressionLanguage(ContainerBuilder $container): void
+    {
+        $expressionLanguageCache = ExpressionEvaluationService::REFERENCE . "_cache";
+        $definition = new Definition();
+        $definition->setClass(FilesystemAdapter::class);
+        $definition->setArgument(0, "");
+        $definition->setArgument(1, 0);
+        $definition->setArgument(2, $container->getParameter('kernel.cache_dir'));
+
+        $container->setDefinition($expressionLanguageCache, $definition);
+
+        $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
+        $definition = new Definition();
+        $definition->setClass(ExpressionLanguage::class);
+        $definition->setArgument(0, new Reference($expressionLanguageCache));
+
+        $container->setDefinition($expressionLanguageAdapter, $definition);
+
+        $definition = new Definition();
+        $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
+        $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
+        $definition->setArgument(0, new Reference($expressionLanguageAdapter));
+        $definition->setPublic(true);
+
+        $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
 }
