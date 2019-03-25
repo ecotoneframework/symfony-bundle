@@ -64,37 +64,6 @@ class IntegrationMessagingBundle extends Bundle
 
     /**
      * @param Container $container
-     * @param ReferenceTypeFromNameResolver $referenceTypeFromNameResolver
-     * @return MessagingSystemConfiguration
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \SimplyCodedSoftware\Messaging\Config\ConfigurationException
-     * @throws \SimplyCodedSoftware\Messaging\MessagingException
-     */
-    private function configureMessaging(Container $container, ReferenceTypeFromNameResolver $referenceTypeFromNameResolver): Configuration
-    {
-        $annotationReader = new AnnotationReader();
-
-        $namespaces = array_merge(
-            $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
-            [FileSystemAnnotationRegistrationService::SIMPLY_CODED_SOFTWARE_NAMESPACE, FileSystemAnnotationRegistrationService::INTEGRATION_MESSAGING_NAMESPACE]
-        );
-
-        return MessagingSystemConfiguration::prepareWithCachedReferenceObjects(
-            new AnnotationModuleRetrievingService(
-                new FileSystemAnnotationRegistrationService(
-                    $annotationReader,
-                    realpath($container->getParameter('kernel.root_dir') . "/.."),
-                    $namespaces,
-                    $container->getParameter("kernel.environment"),
-                    true
-                )
-            ),
-            $referenceTypeFromNameResolver
-        );
-    }
-
-    /**
-     * @param Container $container
      * @param MessagingSystemConfiguration $messagingSystemConfiguration
      * @throws \SimplyCodedSoftware\Messaging\Endpoint\NoConsumerFactoryForBuilderException
      * @throws \SimplyCodedSoftware\Messaging\MessagingException
@@ -122,13 +91,8 @@ class IntegrationMessagingBundle extends Bundle
                 return $this->container->get($reference . '-proxy');
             }
         });
-
+        
         $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
-
-        /** @var GatewayReference $gateway */
-        foreach ($messagingSystem->getGatewayList() as $gateway) {
-            $this->container->set($gateway->getReferenceName(), $gateway->getGateway());
-        }
     }
 
     /**
