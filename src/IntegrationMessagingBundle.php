@@ -45,13 +45,13 @@ class IntegrationMessagingBundle extends Bundle
 
         $definition = new Definition();
         $definition->setClass(ListAllAsynchronousConsumersCommand::class);
-        $definition->setArgument(0, new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
+        $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
         $definition->addTag('console.command', array('command' => 'integration-messaging:list-all-async-consumers'));
         $container->setDefinition(ListAllAsynchronousConsumersCommand::class, $definition);
 
         $definition = new Definition();
         $definition->setClass(RunAsynchronousConsumerCommand::class);
-        $definition->setArgument(0, new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
+        $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
         $definition->addTag('console.command', array('command' => 'integration-messaging:run-consumer'));
         $container->setDefinition(RunAsynchronousConsumerCommand::class, $definition);
     }
@@ -91,7 +91,7 @@ class IntegrationMessagingBundle extends Bundle
                 return $this->container->get($reference . '-proxy');
             }
         });
-        
+
         $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
     }
 
@@ -101,26 +101,16 @@ class IntegrationMessagingBundle extends Bundle
      */
     private function setUpExpressionLanguage(ContainerBuilder $container): void
     {
-        $expressionLanguageCache = ExpressionEvaluationService::REFERENCE . "_cache";
-        $definition = new Definition();
-        $definition->setClass(FilesystemAdapter::class);
-        $definition->setArgument(0, "");
-        $definition->setArgument(1, 0);
-        $definition->setArgument(2, $container->getParameter('kernel.cache_dir'));
-
-        $container->setDefinition($expressionLanguageCache, $definition);
-
         $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
         $definition = new Definition();
         $definition->setClass(ExpressionLanguage::class);
-        $definition->setArgument(0, new Reference($expressionLanguageCache));
 
         $container->setDefinition($expressionLanguageAdapter, $definition);
 
         $definition = new Definition();
         $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
         $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
-        $definition->setArgument(0, new Reference($expressionLanguageAdapter));
+        $definition->addArgument(new Reference($expressionLanguageAdapter));
         $definition->setPublic(true);
 
         $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
