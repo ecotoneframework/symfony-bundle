@@ -46,13 +46,13 @@ class IntegrationMessagingBundle extends Bundle
         $definition = new Definition();
         $definition->setClass(ListAllAsynchronousConsumersCommand::class);
         $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
-        $definition->addTag('console.command', array('command' => 'integration-messaging:list-all-async-consumers'));
+        $definition->addTag('console.command');
         $container->setDefinition(ListAllAsynchronousConsumersCommand::class, $definition);
 
         $definition = new Definition();
         $definition->setClass(RunAsynchronousConsumerCommand::class);
         $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
-        $definition->addTag('console.command', array('command' => 'integration-messaging:run-consumer'));
+        $definition->addTag('console.command');
         $container->setDefinition(RunAsynchronousConsumerCommand::class, $definition);
     }
 

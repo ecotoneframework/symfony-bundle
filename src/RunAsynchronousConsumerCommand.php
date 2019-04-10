@@ -34,6 +34,7 @@ class RunAsynchronousConsumerCommand extends Command
     protected function configure()
     {
         $this
+            ->setName('integration-messaging:run-consumer')
             ->addArgument('name', InputArgument::REQUIRED, 'Pass consumer name to run')
         ;
     }

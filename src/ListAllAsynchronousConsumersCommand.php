@@ -31,6 +31,12 @@ class ListAllAsynchronousConsumersCommand extends Command
         parent::__construct();
     }
 
+    protected function configure()
+    {
+        $this
+            ->setName('integration-messaging:list-all-async-consumers');
+    }
+
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output

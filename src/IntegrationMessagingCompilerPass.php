@@ -53,16 +53,20 @@ class IntegrationMessagingCompilerPass implements CompilerPassInterface
             $definition = new Definition();
             $definition->setFactory([ProxyGenerator::class, 'createFor']);
             $definition->setClass($interface);
-            $definition->setArgument(0, $referenceName);
-            $definition->setArgument(1, new Reference('service_container'));
-            $definition->setArgument(2, $interface);
+            $definition->addArgument($referenceName);
+            $definition->addArgument(new Reference('service_container'));
+            $definition->addArgument($interface);
             $definition->setPublic(true);
 
             $container->setDefinition($referenceName, $definition);
         }
 
         foreach ($messagingConfiguration->getRequiredReferences() as $requiredReference) {
-            $container->setAlias($requiredReference . '-proxy', $requiredReference)->setPublic(true);
+            $alias = $container->setAlias($requiredReference . '-proxy', $requiredReference);
+
+            if ($alias) {
+                $alias->setPublic(true);
+            }
         }
 
         $container->setParameter(IntegrationMessagingBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, serialize($messagingConfiguration));
