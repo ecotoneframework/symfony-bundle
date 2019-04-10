@@ -59,7 +59,12 @@ class IntegrationMessagingBundle extends Bundle
 
     public function boot()
     {
-        $this->buildMessagingSystemFrom($this->container, unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)));
+        try {
+            $this->buildMessagingSystemFrom($this->container, unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)));
+        }catch (\Throwable $e) {
+            echo $e->getMessage();
+            throw $e;
+        }
     }
 
     /**
