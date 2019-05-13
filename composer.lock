@@ -2139,7 +2139,7 @@
         },
         {
             "name": "simplycodedsoftware/integration-messaging",
-            "version": "0.7.11",
+            "version": "0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SimplyCodedSoftware/integration-messaging.git",
