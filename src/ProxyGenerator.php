@@ -3,8 +3,9 @@
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
 use ProxyManager\Factory\RemoteObject\AdapterInterface;
-use Symfony\Component\DependencyInjection\Container;
+use ProxyManager\Factory\RemoteObjectFactory;
 use SimplyCodedSoftware\Messaging\Config\MessagingSystem;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Class ProxyGenerator
@@ -14,15 +15,16 @@ use SimplyCodedSoftware\Messaging\Config\MessagingSystem;
 class ProxyGenerator
 {
     /**
-     * @param string    $referenceName
+     * @param string $referenceName
      * @param Container $container
-     * @param string    $interface
+     * @param string $interface
      *
      * @return object
      */
     public static function createFor(string $referenceName, Container $container, string $interface)
     {
-        $factory = new \ProxyManager\Factory\RemoteObjectFactory(new class ($container, $referenceName) implements AdapterInterface  {
+        $factory = new RemoteObjectFactory(new class ($container, $referenceName) implements AdapterInterface
+        {
 
             /**
              * @var Container
@@ -37,7 +39,7 @@ class ProxyGenerator
              *  constructor.
              *
              * @param Container $container
-             * @param string    $referenceName
+             * @param string $referenceName
              */
             public function __construct(Container $container, string $referenceName)
             {
