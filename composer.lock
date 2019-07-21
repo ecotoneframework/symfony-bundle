@@ -2110,16 +2110,16 @@
         },
         {
             "name": "simplycodedsoftware/integration-messaging",
-            "version": "0.12.3",
+            "version": "0.12.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SimplyCodedSoftware/integration-messaging.git",
-                "reference": "047c260571a5ac331926161709d57c446f3b878b"
+                "reference": "6e485e34a183012d7b417dfe64a1026bd8754c50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging/zipball/047c260571a5ac331926161709d57c446f3b878b",
-                "reference": "047c260571a5ac331926161709d57c446f3b878b",
+                "url": "https://api.github.com/repos/SimplyCodedSoftware/integration-messaging/zipball/6e485e34a183012d7b417dfe64a1026bd8754c50",
+                "reference": "6e485e34a183012d7b417dfe64a1026bd8754c50",
                 "shasum": ""
             },
             "require": {
@@ -2173,7 +2173,7 @@
                 "messaging",
                 "spring"
             ],
-            "time": "2019-07-21T11:02:11+00:00"
+            "time": "2019-07-21T11:22:18+00:00"
         },
         {
             "name": "symfony/cache",
