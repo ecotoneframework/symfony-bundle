@@ -1,9 +1,8 @@
 <?php
 
 namespace Fixture\Car;
-use SimplyCodedSoftware\IntegrationMessaging\Annotation\GatewayAnnotation;
-use SimplyCodedSoftware\IntegrationMessaging\Annotation\MessageEndpointAnnotation;
-use SimplyCodedSoftware\Messaging\Annotation\Gateway\Gateway;
+
+use SimplyCodedSoftware\Messaging\Annotation\Gateway;
 use SimplyCodedSoftware\Messaging\Annotation\MessageEndpoint;
 
 /**

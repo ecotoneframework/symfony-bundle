@@ -2,7 +2,7 @@
 
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
-use SimplyCodedSoftware\IntegrationMessaging\Config\ConfiguredMessagingSystem;
+use SimplyCodedSoftware\Messaging\Config\ConfiguredMessagingSystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;

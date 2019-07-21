@@ -2,24 +2,20 @@
 
 namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use SimplyCodedSoftware\Messaging\Config\Annotation\AnnotationModuleRetrievingService;
-use SimplyCodedSoftware\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
-use SimplyCodedSoftware\Messaging\Config\Configuration;
 use SimplyCodedSoftware\Messaging\Config\ConfiguredMessagingSystem;
-use SimplyCodedSoftware\Messaging\Config\GatewayReference;
 use SimplyCodedSoftware\Messaging\Config\MessagingSystemConfiguration;
-use SimplyCodedSoftware\Messaging\Config\ReferenceTypeFromNameResolver;
+use SimplyCodedSoftware\Messaging\Endpoint\NoConsumerFactoryForBuilderException;
 use SimplyCodedSoftware\Messaging\Handler\ExpressionEvaluationService;
 use SimplyCodedSoftware\Messaging\Handler\ReferenceSearchService;
 use SimplyCodedSoftware\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use SimplyCodedSoftware\Messaging\MessagingException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Throwable;
 
 /**
  * Class IntegrationMessagingBundle
@@ -56,12 +52,32 @@ class IntegrationMessagingBundle extends Bundle
         $container->setDefinition(RunAsynchronousConsumerCommand::class, $definition);
     }
 
+    /**
+     * @param ContainerBuilder $container
+     * @return void
+     */
+    private function setUpExpressionLanguage(ContainerBuilder $container): void
+    {
+        $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
+        $definition = new Definition();
+        $definition->setClass(ExpressionLanguage::class);
+
+        $container->setDefinition($expressionLanguageAdapter, $definition);
+
+        $definition = new Definition();
+        $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
+        $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
+        $definition->addArgument(new Reference($expressionLanguageAdapter));
+        $definition->setPublic(true);
+
+        $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
+    }
 
     public function boot()
     {
         try {
             $this->buildMessagingSystemFrom($this->container, unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)));
-        }catch (\Throwable $e) {
+        } catch (Throwable $e) {
             echo $e->getMessage();
             throw $e;
         }
@@ -70,8 +86,8 @@ class IntegrationMessagingBundle extends Bundle
     /**
      * @param Container $container
      * @param MessagingSystemConfiguration $messagingSystemConfiguration
-     * @throws \SimplyCodedSoftware\Messaging\Endpoint\NoConsumerFactoryForBuilderException
-     * @throws \SimplyCodedSoftware\Messaging\MessagingException
+     * @throws NoConsumerFactoryForBuilderException
+     * @throws MessagingException
      */
     private function buildMessagingSystemFrom(Container $container, MessagingSystemConfiguration $messagingSystemConfiguration): void
     {
@@ -98,26 +114,5 @@ class IntegrationMessagingBundle extends Bundle
         });
 
         $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @return void
-     */
-    private function setUpExpressionLanguage(ContainerBuilder $container): void
-    {
-        $expressionLanguageAdapter = ExpressionEvaluationService::REFERENCE . "_adapter";
-        $definition = new Definition();
-        $definition->setClass(ExpressionLanguage::class);
-
-        $container->setDefinition($expressionLanguageAdapter, $definition);
-
-        $definition = new Definition();
-        $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
-        $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
-        $definition->addArgument(new Reference($expressionLanguageAdapter));
-        $definition->setPublic(true);
-
-        $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
 }

@@ -29,24 +29,18 @@ class IntegrationMessagingCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $annotationReader = new AnnotationReader();
-
         $namespaces = array_merge(
             $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
             [FileSystemAnnotationRegistrationService::SIMPLY_CODED_SOFTWARE_NAMESPACE, FileSystemAnnotationRegistrationService::INTEGRATION_MESSAGING_NAMESPACE]
         );
 
-        $messagingConfiguration =  MessagingSystemConfiguration::prepareWithCachedReferenceObjects(
-            new AnnotationModuleRetrievingService(
-                new FileSystemAnnotationRegistrationService(
-                    $annotationReader,
-                    realpath($container->getParameter('kernel.root_dir') . "/.."),
-                    $namespaces,
-                    $container->getParameter("kernel.environment"),
-                    true
-                )
-            ),
-            new SymfonyReferenceTypeResolver($container)
+        $messagingConfiguration =  MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
+            realpath($container->getParameter('kernel.root_dir') . "/.."),
+            $namespaces,
+            new SymfonyReferenceTypeResolver($container),
+            $container->getParameter("kernel.environment"),
+            $container->getParameter("kernel.environment") === 'prod',
+            true
         );
 
         foreach ($messagingConfiguration->getRegisteredGateways() as $referenceName => $interface) {
