@@ -24,6 +24,6 @@ if ($debug) {
     Debug::enable();
 }
 
-$kernel = new SimplyCodedSoftware\IntegrationMessaging\Symfony\Kernel($env, $debug);
+$kernel = new Ecotone\Symfony\Kernel($env, $debug);
 $application = new Application($kernel);
 $application->run($input);

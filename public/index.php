@@ -31,7 +31,7 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts(explode(',', $trustedHosts));
 }
 
-$kernel = new \SimplyCodedSoftware\IntegrationMessaging\Symfony\Kernel($env, $debug);
+$kernel = new \Ecotone\Symfony\Kernel($env, $debug);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

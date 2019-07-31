@@ -1,8 +1,8 @@
 <?php
 
-namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
+namespace Ecotone\Symfony;
 
-use SimplyCodedSoftware\Messaging\Config\ConfiguredMessagingSystem;
+use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ListAllAsynchronousConsumers
- * @package SimplyCodedSoftware\IntegrationMessaging\Symfony
+ * @package Ecotone\Symfony
  * @author  Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class ListAllAsynchronousConsumersCommand extends Command

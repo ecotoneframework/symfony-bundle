@@ -2,7 +2,7 @@ default:
     extensions:
       Behat\Symfony2Extension:
         kernel:
-          class: "SimplyCodedSoftware\\IntegrationMessaging\\Symfony\\Kernel"
+          class: "Ecotone\\Symfony\\Kernel"
     translation:
         locale: en
     formatters:

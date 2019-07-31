@@ -2,8 +2,8 @@
 
 namespace Fixture\Car;
 
-use SimplyCodedSoftware\Messaging\Annotation\MessageEndpoint;
-use SimplyCodedSoftware\Messaging\Annotation\ServiceActivator;
+use Ecotone\Messaging\Annotation\MessageEndpoint;
+use Ecotone\Messaging\Annotation\ServiceActivator;
 use Fixture\Car\IncreaseSpeedGateway;
 use Fixture\Car\GetSpeedGateway;
 use Fixture\Car\StopGateway;

@@ -12,10 +12,9 @@
     "description": "Provides symfony integration to integration messaging",
     "require": {
         "php": "^7.3",
-        "doctrine/doctrine-bundle": "^1.8.1|^2.0",
-        "simplycodedsoftware/integration-messaging": "^0.13",
-        "symfony/console": "^2.0|^3.3|^4.0",
-        "symfony/framework-bundle": "^2.0|^3.2|^4.0"
+        "ecotone/ecotone": "^0.1.0@dev",
+        "symfony/console": "^3.3|^4.0",
+        "symfony/framework-bundle": "^3.2|^4.0"
     },
     "require-dev": {
         "symfony/dotenv": "^4.0",
@@ -33,7 +32,7 @@
 
     "autoload": {
         "psr-4": {
-            "SimplyCodedSoftware\\IntegrationMessaging\\Symfony\\": "src"
+            "Ecotone\\Symfony\\": "src"
         }
     },
     "repositories": [],

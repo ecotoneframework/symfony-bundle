@@ -1,10 +1,10 @@
 <?php
 
-namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
+namespace Ecotone\Symfony;
 
 use ProxyManager\Factory\RemoteObject\AdapterInterface;
 use ProxyManager\Factory\RemoteObjectFactory;
-use SimplyCodedSoftware\Messaging\Config\MessagingSystem;
+use Ecotone\Messaging\Config\MessagingSystem;
 use Symfony\Component\DependencyInjection\Container;
 
 /**

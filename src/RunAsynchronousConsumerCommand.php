@@ -1,8 +1,8 @@
 <?php
 
-namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
+namespace Ecotone\Symfony;
 
-use SimplyCodedSoftware\IntegrationMessaging\Config\ConfiguredMessagingSystem;
+use Ecotone\Config\ConfiguredMessagingSystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class RunAsynchronousConsumerCommand
- * @package SimplyCodedSoftware\IntegrationMessaging\Symfony
+ * @package Ecotone\Symfony
  * @author  Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class RunAsynchronousConsumerCommand extends Command

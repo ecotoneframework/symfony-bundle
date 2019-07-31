@@ -1,15 +1,15 @@
 <?php
 
-namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
+namespace Ecotone\Symfony;
 
-use SimplyCodedSoftware\Messaging\Config\ReferenceTypeFromNameResolver;
-use SimplyCodedSoftware\Messaging\Handler\TypeDescriptor;
+use Ecotone\Messaging\Config\ReferenceTypeFromNameResolver;
+use Ecotone\Messaging\Handler\TypeDescriptor;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class SymfonyReferenceTypeResolver
- * @package SimplyCodedSoftware\IntegrationMessaging\Symfony
+ * @package Ecotone\Symfony
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class SymfonyReferenceTypeResolver implements ReferenceTypeFromNameResolver
@@ -31,8 +31,8 @@ class SymfonyReferenceTypeResolver implements ReferenceTypeFromNameResolver
     /**
      * @param string $referenceName
      * @return TypeDescriptor
-     * @throws \SimplyCodedSoftware\Messaging\Handler\TypeDefinitionException
-     * @throws \SimplyCodedSoftware\Messaging\MessagingException
+     * @throws \Ecotone\Messaging\Handler\TypeDefinitionException
+     * @throws \Ecotone\Messaging\MessagingException
      */
     public function resolve(string $referenceName): TypeDescriptor
     {

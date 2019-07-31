@@ -1,14 +1,14 @@
 <?php
 
-namespace SimplyCodedSoftware\IntegrationMessaging\Symfony;
+namespace Ecotone\Symfony;
 
-use SimplyCodedSoftware\Messaging\Config\ConfiguredMessagingSystem;
-use SimplyCodedSoftware\Messaging\Config\MessagingSystemConfiguration;
-use SimplyCodedSoftware\Messaging\Endpoint\NoConsumerFactoryForBuilderException;
-use SimplyCodedSoftware\Messaging\Handler\ExpressionEvaluationService;
-use SimplyCodedSoftware\Messaging\Handler\ReferenceSearchService;
-use SimplyCodedSoftware\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
-use SimplyCodedSoftware\Messaging\MessagingException;
+use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
+use Ecotone\Messaging\Config\MessagingSystemConfiguration;
+use Ecotone\Messaging\Endpoint\NoConsumerFactoryForBuilderException;
+use Ecotone\Messaging\Handler\ExpressionEvaluationService;
+use Ecotone\Messaging\Handler\ReferenceSearchService;
+use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
+use Ecotone\Messaging\MessagingException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -19,7 +19,7 @@ use Throwable;
 
 /**
  * Class IntegrationMessagingBundle
- * @package SimplyCodedSoftware\IntegrationMessaging\Symfony
+ * @package Ecotone\Symfony
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class IntegrationMessagingBundle extends Bundle

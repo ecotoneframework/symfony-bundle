@@ -2,8 +2,8 @@
 
 namespace Fixture\Car;
 
-use SimplyCodedSoftware\Messaging\Annotation\Gateway;
-use SimplyCodedSoftware\Messaging\Annotation\MessageEndpoint;
+use Ecotone\Messaging\Annotation\Gateway;
+use Ecotone\Messaging\Annotation\MessageEndpoint;
 
 /**
  * Interface IncreaseSpeedGateway
