@@ -1,5 +1,5 @@
 {
-    "name": "simplycodedsoftware/integration-messaging-symfony",
+    "name": "ecotone/symfony",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -8,8 +8,8 @@
             "email": "dgafka.mail@gmail.com"
         }
     ],
-    "keywords": ["messaging", "message", "spring", "enterprise integration patterns", "symfony", "bundle", "integration"],
-    "description": "Provides symfony integration to integration messaging",
+    "keywords": ["symfony","ecotone","ddd","messaging","message", "enterprise integration patterns", "eip", "distributed architecture"],
+    "description": "Extends Ecotone with Symfony integration",
     "require": {
         "php": "^7.3",
         "ecotone/ecotone": "^0.1.0@dev",
