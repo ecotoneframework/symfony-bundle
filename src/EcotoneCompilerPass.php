@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * @package Ecotone\Symfony
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
-class IntegrationMessagingCompilerPass implements CompilerPassInterface
+class EcotoneCompilerPass implements CompilerPassInterface
 {
     /**
      * @param ContainerBuilder $container
@@ -63,6 +63,6 @@ class IntegrationMessagingCompilerPass implements CompilerPassInterface
             }
         }
 
-        $container->setParameter(IntegrationMessagingBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, serialize($messagingConfiguration));
+        $container->setParameter(EcotoneBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, serialize($messagingConfiguration));
     }
 }

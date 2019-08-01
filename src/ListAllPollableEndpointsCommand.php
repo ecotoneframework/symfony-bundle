@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package Ecotone\Symfony
  * @author  Dariusz Gafka <dgafka.mail@gmail.com>
  */
-class ListAllAsynchronousConsumersCommand extends Command
+class ListAllPollableEndpointsCommand extends Command
 {
     /**
      * @var ConfiguredMessagingSystem
@@ -34,7 +34,7 @@ class ListAllAsynchronousConsumersCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('integration-messaging:list-all-async-consumers');
+            ->setName('ecotone:list-all-pollable-endpoints');
     }
 
     /**
@@ -52,7 +52,7 @@ class ListAllAsynchronousConsumersCommand extends Command
 
         $table = new Table($output);
         $table
-            ->setHeaders(array('Consumer Names'))
+            ->setHeaders(array('Endpoint Names'))
             ->setRows($repackedNames)
         ;
         $table->render();

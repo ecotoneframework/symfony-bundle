@@ -1,10 +1,10 @@
 <?php
 
-use Ecotone\Symfony\IntegrationMessagingBundle;
+use Ecotone\Symfony\EcotoneBundle;
 use Fixture\TestBundle;
 
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     TestBundle::class => ['all' => true],
-    IntegrationMessagingBundle::class => ['all' => true]
+    EcotoneBundle::class => ['all' => true]
 ];
