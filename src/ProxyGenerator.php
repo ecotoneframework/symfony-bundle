@@ -2,6 +2,7 @@
 
 namespace Ecotone\Symfony;
 
+use ProxyManager\Configuration;
 use ProxyManager\Factory\RemoteObject\AdapterInterface;
 use ProxyManager\Factory\RemoteObjectFactory;
 use Ecotone\Messaging\Config\MessagingSystem;
@@ -18,10 +19,11 @@ class ProxyGenerator
      * @param string $referenceName
      * @param Container $container
      * @param string $interface
+     * @param Configuration $configuration
      *
      * @return object
      */
-    public static function createFor(string $referenceName, Container $container, string $interface)
+    public static function createFor(string $referenceName, Container $container, string $interface, Configuration $configuration)
     {
         $factory = new RemoteObjectFactory(new class ($container, $referenceName) implements AdapterInterface
         {
@@ -57,7 +59,7 @@ class ProxyGenerator
 
                 return call_user_func_array([$messagingSystem->getGatewayByName($this->referenceName), $method], $params);
             }
-        });
+        }, $configuration);
 
         return $factory->createProxy($interface);
     }

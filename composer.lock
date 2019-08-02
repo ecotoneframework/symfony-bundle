@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "32306c9985bc0f391d4eaf8e1fd28660",
+    "content-hash": "5ab1298d1ebde0c6709c3c4f514cd23e",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -192,16 +192,16 @@
         },
         {
             "name": "ecotone/ecotone",
-            "version": "0.1.0",
+            "version": "0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ecotoneframework/ecotone.git",
-                "reference": "f99ce7c925790dade9302c3ea710555aa0142a9b"
+                "reference": "a375fe3d61e54c672e1f8dc0d93bdcfa8ac2f347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ecotoneframework/ecotone/zipball/f99ce7c925790dade9302c3ea710555aa0142a9b",
-                "reference": "f99ce7c925790dade9302c3ea710555aa0142a9b",
+                "url": "https://api.github.com/repos/ecotoneframework/ecotone/zipball/a375fe3d61e54c672e1f8dc0d93bdcfa8ac2f347",
+                "reference": "a375fe3d61e54c672e1f8dc0d93bdcfa8ac2f347",
                 "shasum": ""
             },
             "require": {
@@ -260,7 +260,7 @@
                 "query",
                 "spring"
             ],
-            "time": "2019-07-31T17:53:24+00:00"
+            "time": "2019-08-02T13:20:54+00:00"
         },
         {
             "name": "guzzlehttp/psr7",

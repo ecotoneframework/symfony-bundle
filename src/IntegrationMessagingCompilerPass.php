@@ -7,6 +7,8 @@ use Ecotone\Messaging\Config\Annotation\AnnotationModuleRetrievingService;
 use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
 use Ecotone\Messaging\Config\Configuration;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
+use Ecotone\Messaging\Handler\Gateway\GatewayProxyConfiguration;
+use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -33,13 +35,24 @@ class IntegrationMessagingCompilerPass implements CompilerPassInterface
             $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
             [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
         );
+        $isProductionEnvironment = $container->getParameter("kernel.environment") === 'prod';
+
+        $proxyConfigurationDefinition = new Definition();
+        $proxyConfigurationDefinition->setClass(\ProxyManager\Configuration::class);
+//        $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
+        if ($isProductionEnvironment) {
+            $proxyConfigurationDefinition->addMethodCall('setProxiesTargetDir', ["%kernel.cache_dir%/%kernel.environment%/ecotone"]);
+        }
+        $proxyConfigurationDefinition->setPublic(true);
+        $container->setDefinition(GatewayProxyConfiguration::REFERENCE_NAME, $proxyConfigurationDefinition);
+
 
         $messagingConfiguration =  MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
             realpath($container->getParameter('kernel.root_dir') . "/.."),
             $namespaces,
             new SymfonyReferenceTypeResolver($container),
             $container->getParameter("kernel.environment"),
-            $container->getParameter("kernel.environment") === 'prod',
+            $isProductionEnvironment,
             true
         );
 
@@ -50,6 +63,7 @@ class IntegrationMessagingCompilerPass implements CompilerPassInterface
             $definition->addArgument($referenceName);
             $definition->addArgument(new Reference('service_container'));
             $definition->addArgument($interface);
+            $definition->addArgument(new Reference(GatewayProxyConfiguration::REFERENCE_NAME));
             $definition->setPublic(true);
 
             $container->setDefinition($referenceName, $definition);
