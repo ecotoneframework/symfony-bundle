@@ -41,7 +41,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
         $proxyConfigurationDefinition->setClass(\ProxyManager\Configuration::class);
 //        $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
         if ($isProductionEnvironment) {
-            $proxyConfigurationDefinition->addMethodCall('setProxiesTargetDir', ["%kernel.cache_dir%/%kernel.environment%/ecotone"]);
+            $proxyConfigurationDefinition->addMethodCall('setProxiesTargetDir', ["%kernel.cache_dir%"]);
         }
         $proxyConfigurationDefinition->setPublic(true);
         $container->setDefinition(GatewayProxyConfiguration::REFERENCE_NAME, $proxyConfigurationDefinition);
