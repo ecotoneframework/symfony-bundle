@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package Ecotone\Symfony
  * @author  Dariusz Gafka <dgafka.mail@gmail.com>
  */
-class RunAsynchronousConsumerCommand extends Command
+class RunPollableEndpointCommand extends Command
 {
     /**
      * @var ConfiguredMessagingSystem
@@ -34,8 +34,8 @@ class RunAsynchronousConsumerCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('integration-messaging:run-consumer')
-            ->addArgument('name', InputArgument::REQUIRED, 'Pass consumer name to run')
+            ->setName('ecotone:run-endpoint')
+            ->addArgument('name', InputArgument::REQUIRED, 'Pass endpoint name to run')
         ;
     }
 

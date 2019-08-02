@@ -13,7 +13,7 @@ default:
               '': "%paths.base%/app/autoload.php"
           paths:    [ tests/Behat/features ]
           type: symfony_bundle
-          bundle: IntegrationMessagingBundle
+          bundle: EcotoneBundle
           contexts:
             - Behat\Bootstrap\DomainContext:
                   carService: "@Fixture\\Car\\CarService"

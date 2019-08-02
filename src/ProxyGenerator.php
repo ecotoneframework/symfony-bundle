@@ -55,7 +55,7 @@ class ProxyGenerator
             public function call(string $wrappedClass, string $method, array $params = [])
             {
                 /** @var MessagingSystem $messagingSystem */
-                $messagingSystem = $this->container->get(IntegrationMessagingBundle::MESSAGING_SYSTEM_SERVICE_NAME);
+                $messagingSystem = $this->container->get(EcotoneBundle::MESSAGING_SYSTEM_SERVICE_NAME);
 
                 return call_user_func_array([$messagingSystem->getGatewayByName($this->referenceName), $method], $params);
             }

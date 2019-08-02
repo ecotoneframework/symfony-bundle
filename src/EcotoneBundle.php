@@ -23,14 +23,14 @@ use Throwable;
  * @package Ecotone\Symfony
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
-class IntegrationMessagingBundle extends Bundle
+class EcotoneBundle extends Bundle
 {
     const MESSAGING_SYSTEM_SERVICE_NAME = "messaging_system";
     const MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME = "messaging_system_configuration";
 
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new IntegrationMessagingCompilerPass());
+        $container->addCompilerPass(new EcotoneCompilerPass());
 
         $this->setUpExpressionLanguage($container);
 
@@ -41,16 +41,16 @@ class IntegrationMessagingBundle extends Bundle
         $container->setDefinition(self::MESSAGING_SYSTEM_SERVICE_NAME, $definition);
 
         $definition = new Definition();
-        $definition->setClass(ListAllAsynchronousConsumersCommand::class);
+        $definition->setClass(ListAllPollableEndpointsCommand::class);
         $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
         $definition->addTag('console.command');
-        $container->setDefinition(ListAllAsynchronousConsumersCommand::class, $definition);
+        $container->setDefinition(ListAllPollableEndpointsCommand::class, $definition);
 
         $definition = new Definition();
-        $definition->setClass(RunAsynchronousConsumerCommand::class);
+        $definition->setClass(RunPollableEndpointCommand::class);
         $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
         $definition->addTag('console.command');
-        $container->setDefinition(RunAsynchronousConsumerCommand::class, $definition);
+        $container->setDefinition(RunPollableEndpointCommand::class, $definition);
     }
 
     /**
