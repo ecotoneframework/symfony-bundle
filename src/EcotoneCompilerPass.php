@@ -8,7 +8,9 @@ use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
 use Ecotone\Messaging\Config\Configuration;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Handler\Gateway\GatewayProxyConfiguration;
+use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
+use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -39,9 +41,19 @@ class EcotoneCompilerPass implements CompilerPassInterface
 
         $proxyConfigurationDefinition = new Definition();
         $proxyConfigurationDefinition->setClass(\ProxyManager\Configuration::class);
-//        $config->setGeneratorStrategy(new EvaluatingGeneratorStrategy());
         if ($isProductionEnvironment) {
+            $fileLocatorDefinition = new Definition();
+            $fileLocatorDefinition->setClass(FileLocator::class);
+            $fileLocatorDefinition->addArgument("%kernel.cache_dir%");
+            $container->setDefinition("ecotoneFileLocator", $fileLocatorDefinition);
+
+            $fileLocatorStrategyDefinition = new Definition();
+            $fileLocatorStrategyDefinition->setClass(FileWriterGeneratorStrategy::class);
+            $fileLocatorStrategyDefinition->addArgument(new Reference("ecotoneFileLocator"));
+            $container->setDefinition("ecotoneFileLocatorStrategy", $fileLocatorStrategyDefinition);
+
             $proxyConfigurationDefinition->addMethodCall('setProxiesTargetDir', ["%kernel.cache_dir%"]);
+            $proxyConfigurationDefinition->addMethodCall("setGeneratorStrategy", [new Reference("ecotoneFileLocatorStrategy")]);
         }
         $proxyConfigurationDefinition->setPublic(true);
         $container->setDefinition(GatewayProxyConfiguration::REFERENCE_NAME, $proxyConfigurationDefinition);
