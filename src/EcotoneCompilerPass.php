@@ -2,15 +2,14 @@
 
 namespace Ecotone\Symfony;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Ecotone\Messaging\Config\Annotation\AnnotationModuleRetrievingService;
+use Doctrine\Common\Annotations\AnnotationException;
 use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
-use Ecotone\Messaging\Config\Configuration;
+use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
-use Ecotone\Messaging\Handler\Gateway\GatewayProxyConfiguration;
-use ProxyManager\FileLocator\FileLocator;
-use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
-use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
+use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
+use Ecotone\Messaging\MessagingException;
+use Ecotone\Messaging\Support\InvalidArgumentException;
+use ReflectionException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -25,11 +24,12 @@ class EcotoneCompilerPass implements CompilerPassInterface
 {
     /**
      * @param ContainerBuilder $container
-     * @return Configuration
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \Ecotone\Messaging\Config\ConfigurationException
-     * @throws \Ecotone\Messaging\Handler\TypeDefinitionException
-     * @throws \Ecotone\Messaging\MessagingException
+     * @return void
+     * @throws AnnotationException
+     * @throws ConfigurationException
+     * @throws MessagingException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function process(ContainerBuilder $container)
     {
@@ -37,48 +37,30 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
             [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
         );
-        $isProductionEnvironment = $container->getParameter("kernel.environment") === 'prod';
+        $isLazyLoaded = $container->getParameter("kernel.environment") === 'prod';
 
-        $proxyConfigurationDefinition = new Definition();
-        $proxyConfigurationDefinition->setClass(\ProxyManager\Configuration::class);
-        if ($isProductionEnvironment) {
-            $fileLocatorDefinition = new Definition();
-            $fileLocatorDefinition->setClass(FileLocator::class);
-            $fileLocatorDefinition->addArgument("%kernel.cache_dir%");
-            $container->setDefinition("ecotoneFileLocator", $fileLocatorDefinition);
-
-            $fileLocatorStrategyDefinition = new Definition();
-            $fileLocatorStrategyDefinition->setClass(FileWriterGeneratorStrategy::class);
-            $fileLocatorStrategyDefinition->addArgument(new Reference("ecotoneFileLocator"));
-            $container->setDefinition("ecotoneFileLocatorStrategy", $fileLocatorStrategyDefinition);
-
-            $proxyConfigurationDefinition->addMethodCall('setProxiesTargetDir', ["%kernel.cache_dir%"]);
-            $proxyConfigurationDefinition->addMethodCall("setGeneratorStrategy", [new Reference("ecotoneFileLocatorStrategy")]);
-        }
-        $proxyConfigurationDefinition->setPublic(true);
-        $container->setDefinition(GatewayProxyConfiguration::REFERENCE_NAME, $proxyConfigurationDefinition);
-
-
-        $messagingConfiguration =  MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
+        $messagingConfiguration = MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
             realpath($container->getParameter('kernel.root_dir') . "/.."),
             $namespaces,
             new SymfonyReferenceTypeResolver($container),
             $container->getParameter("kernel.environment"),
-            $isProductionEnvironment,
-            true
+            $isLazyLoaded,
+            true,
+            ProxyFactory::createWithCache($container->getParameter("kernel.cache_dir"))
         );
 
-        foreach ($messagingConfiguration->getRegisteredGateways() as $referenceName => $interface) {
+        foreach ($messagingConfiguration->getRegisteredGateways() as $gatewayProxyBuilder) {
             $definition = new Definition();
             $definition->setFactory([ProxyGenerator::class, 'createFor']);
-            $definition->setClass($interface);
-            $definition->addArgument($referenceName);
+            $definition->setClass($gatewayProxyBuilder->getInterfaceName());
+            $definition->addArgument($gatewayProxyBuilder->getReferenceName());
             $definition->addArgument(new Reference('service_container'));
-            $definition->addArgument($interface);
-            $definition->addArgument(new Reference(GatewayProxyConfiguration::REFERENCE_NAME));
+            $definition->addArgument($gatewayProxyBuilder->getInterfaceName());
+            $definition->addArgument("%kernel.cache_dir%");
+            $definition->addArgument($isLazyLoaded);
             $definition->setPublic(true);
 
-            $container->setDefinition($referenceName, $definition);
+            $container->setDefinition($gatewayProxyBuilder->getReferenceName(), $definition);
         }
 
         foreach ($messagingConfiguration->getRequiredReferences() as $requiredReference) {

@@ -2,6 +2,8 @@
 
 namespace Ecotone\Symfony;
 
+use Ecotone\Messaging\Config\ConfigurationException;
+use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\RemoteObject\AdapterInterface;
 use ProxyManager\Factory\RemoteObjectFactory;
@@ -21,10 +23,23 @@ class ProxyGenerator
      * @param string $interface
      * @param Configuration $configuration
      *
+     * @param string $cacheDirectoryPath
+     * @param bool $isLazyLoaded
      * @return object
+     * @throws \Ecotone\Messaging\MessagingException
      */
-    public static function createFor(string $referenceName, Container $container, string $interface, Configuration $configuration)
+    public static function createFor(string $referenceName, Container $container, string $interface, string $cacheDirectoryPath, bool $isLazyLoaded)
     {
+        if ($isLazyLoaded) {
+            $proxyFactory = ProxyFactory::createWithCache($cacheDirectoryPath)->lockConfiguration();
+
+            if (!$proxyFactory->hasCachedVersion($interface)) {
+                throw ConfigurationException::create("There is problem with configuration. Proxy class for {$interface} was not pregenerated for symfony bundle. Can't use lazy loading configuration.");
+            }
+        }else {
+            $proxyFactory = ProxyFactory::createNoCache();
+        }
+
         $factory = new RemoteObjectFactory(new class ($container, $referenceName) implements AdapterInterface
         {
 
@@ -59,7 +74,7 @@ class ProxyGenerator
 
                 return call_user_func_array([$messagingSystem->getGatewayByName($this->referenceName), $method], $params);
             }
-        }, $configuration);
+        }, $proxyFactory->getConfiguration());
 
         return $factory->createProxy($interface);
     }

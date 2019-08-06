@@ -77,7 +77,6 @@ class EcotoneBundle extends Bundle
     public function boot()
     {
         try {
-            spl_autoload_register($this->container->get(GatewayProxyConfiguration::REFERENCE_NAME)->getProxyAutoloader());
             $this->buildMessagingSystemFrom($this->container, unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)));
         } catch (Throwable $e) {
             echo $e->getMessage();
