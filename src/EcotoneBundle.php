@@ -4,6 +4,7 @@ namespace Ecotone\Symfony;
 
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
+use Ecotone\Messaging\Conversion\MediaType;
 use Ecotone\Messaging\Endpoint\NoConsumerFactoryForBuilderException;
 use Ecotone\Messaging\Handler\ExpressionEvaluationService;
 use Ecotone\Messaging\Handler\Gateway\GatewayProxyConfiguration;
@@ -41,6 +42,12 @@ class EcotoneBundle extends Bundle
         $container->setDefinition(self::MESSAGING_SYSTEM_SERVICE_NAME, $definition);
 
         $definition = new Definition();
+        $definition->setClass(SymfonyReferenceSearchService::class);
+        $definition->setPublic(true);
+        $definition->addArgument(new Reference('service_container'));
+        $container->setDefinition("symfonyReferenceSearchService", $definition);
+
+        $definition = new Definition();
         $definition->setClass(ListAllPollableEndpointsCommand::class);
         $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
         $definition->addTag('console.command');
@@ -76,43 +83,10 @@ class EcotoneBundle extends Bundle
 
     public function boot()
     {
-        try {
-            $this->buildMessagingSystemFrom($this->container, unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)));
-        } catch (Throwable $e) {
-            echo $e->getMessage();
-            throw $e;
-        }
-    }
+        $messagingSystem = (
+            unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME))
+        )->buildMessagingSystemFromConfiguration($this->container->get('symfonyReferenceSearchService'));
 
-    /**
-     * @param Container $container
-     * @param MessagingSystemConfiguration $messagingSystemConfiguration
-     * @throws NoConsumerFactoryForBuilderException
-     * @throws MessagingException
-     */
-    private function buildMessagingSystemFrom(Container $container, MessagingSystemConfiguration $messagingSystemConfiguration): void
-    {
-        $messagingSystem = $messagingSystemConfiguration->buildMessagingSystemFromConfiguration(new class($container) implements ReferenceSearchService
-        {
-            /**
-             * @var Container
-             */
-            private $container;
-
-            /**
-             *  constructor.
-             * @param Container $container
-             */
-            public function __construct(Container $container)
-            {
-                $this->container = $container;
-            }
-
-            public function get(string $reference)
-            {
-                return $this->container->get($reference . '-proxy');
-            }
-        });
 
         $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
     }

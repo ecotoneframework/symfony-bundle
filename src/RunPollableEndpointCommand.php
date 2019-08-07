@@ -2,7 +2,7 @@
 
 namespace Ecotone\Symfony;
 
-use Ecotone\Config\ConfiguredMessagingSystem;
+use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,12 +35,11 @@ class RunPollableEndpointCommand extends Command
     {
         $this
             ->setName('ecotone:run-endpoint')
-            ->addArgument('name', InputArgument::REQUIRED, 'Pass endpoint name to run')
-        ;
+            ->addArgument('name', InputArgument::REQUIRED, 'Pass endpoint name to run');
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null|void
