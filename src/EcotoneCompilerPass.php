@@ -71,6 +71,8 @@ class EcotoneCompilerPass implements CompilerPassInterface
             }
         }
 
-        $container->setParameter(EcotoneBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, serialize($messagingConfiguration));
+        $path = $container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . 'ecotoneMessagingConfiguration';
+        file_put_contents($path, serialize($messagingConfiguration));
+        $container->setParameter(EcotoneBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, $path);
     }
 }

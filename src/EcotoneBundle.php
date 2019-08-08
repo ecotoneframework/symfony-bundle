@@ -84,7 +84,7 @@ class EcotoneBundle extends Bundle
     public function boot()
     {
         $messagingSystem = (
-            unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME))
+        unserialize(file_get_contents($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)))
         )->buildMessagingSystemFromConfiguration($this->container->get('symfonyReferenceSearchService'));
 
 
