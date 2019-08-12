@@ -12,7 +12,7 @@
     "description": "Extends Ecotone with Symfony integration",
     "require": {
         "php": "^7.3",
-        "ecotone/ecotone": "^0.2.0@dev",
+        "ecotone/ecotone": "^0.3.0@dev",
         "symfony/console": "^3.3|^4.0",
         "symfony/framework-bundle": "^3.2|^4.0"
     },
