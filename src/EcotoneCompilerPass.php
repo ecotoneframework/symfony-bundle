@@ -22,6 +22,10 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class EcotoneCompilerPass implements CompilerPassInterface
 {
+    public const WORKING_NAMESPACES_CONFIG = "ecotone.namespaces";
+    public const FAIL_FAST_CONFIG = "ecotone.fail_fast";
+    public const LOAD_SRC = "ecotone.load_src";
+
     /**
      * @param ContainerBuilder $container
      * @return void
@@ -34,18 +38,17 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $namespaces = array_merge(
-            $container->hasParameter('messaging.application.context.namespace') ? $container->getParameter('messaging.application.context.namespace') : [],
+            $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
             [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
         );
-        $isLazyLoaded = $container->getParameter("kernel.environment") === 'prod';
 
         $messagingConfiguration = MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
             realpath($container->getParameter('kernel.root_dir') . "/.."),
             $namespaces,
             new SymfonyReferenceTypeResolver($container),
             $container->getParameter("kernel.environment"),
-            $isLazyLoaded,
-            true,
+            $container->getParameter(self::FAIL_FAST_CONFIG),
+            $container->getParameter(self::LOAD_SRC),
             ProxyFactory::createWithCache($container->getParameter("kernel.cache_dir"))
         );
 
@@ -57,7 +60,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $definition->addArgument(new Reference('service_container'));
             $definition->addArgument($gatewayProxyBuilder->getInterfaceName());
             $definition->addArgument("%kernel.cache_dir%");
-            $definition->addArgument($isLazyLoaded);
+            $definition->addArgument($container->getParameter(self::FAIL_FAST_CONFIG));
             $definition->setPublic(true);
 
             $container->setDefinition($gatewayProxyBuilder->getReferenceName(), $definition);

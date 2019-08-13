@@ -192,16 +192,16 @@
         },
         {
             "name": "ecotone/ecotone",
-            "version": "0.3.0",
+            "version": "0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ecotoneframework/ecotone.git",
-                "reference": "3f23cbe0d68c9f4f2418737897851352d79e3341"
+                "reference": "fb3750d7cd7530e20ad926ab39c79bbefae7f727"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ecotoneframework/ecotone/zipball/3f23cbe0d68c9f4f2418737897851352d79e3341",
-                "reference": "3f23cbe0d68c9f4f2418737897851352d79e3341",
+                "url": "https://api.github.com/repos/ecotoneframework/ecotone/zipball/fb3750d7cd7530e20ad926ab39c79bbefae7f727",
+                "reference": "fb3750d7cd7530e20ad926ab39c79bbefae7f727",
                 "shasum": ""
             },
             "require": {
@@ -257,7 +257,7 @@
                 "query",
                 "spring"
             ],
-            "time": "2019-08-12T13:38:29+00:00"
+            "time": "2019-08-13T04:23:21+00:00"
         },
         {
             "name": "ocramius/package-versions",

@@ -11,6 +11,7 @@ use Ecotone\Messaging\Handler\Gateway\GatewayProxyConfiguration;
 use Ecotone\Messaging\Handler\ReferenceSearchService;
 use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
 use Ecotone\Messaging\MessagingException;
+use Ecotone\Symfony\DepedencyInjection\EcotoneExtension;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -89,5 +90,10 @@ class EcotoneBundle extends Bundle
 
 
         $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
+    }
+
+    public function getContainerExtension()
+    {
+        return new EcotoneExtension();
     }
 }
