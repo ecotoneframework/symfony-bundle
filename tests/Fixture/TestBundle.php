@@ -14,8 +14,5 @@ class TestBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
-        $container->setParameter("messaging.application.context.namespace", [
-            "Fixture\Car"
-        ]);
     }
 }

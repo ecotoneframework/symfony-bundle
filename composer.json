@@ -1,6 +1,6 @@
 {
     "name": "ecotone/symfony",
-    "type": "library",
+    "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
         {
