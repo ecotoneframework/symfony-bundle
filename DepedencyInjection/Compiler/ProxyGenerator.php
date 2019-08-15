@@ -1,9 +1,10 @@
 <?php
 
-namespace Ecotone\Symfony;
+namespace Ecotone\Symfony\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
+use Ecotone\Symfony\EcotoneBundle;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\RemoteObject\AdapterInterface;
 use ProxyManager\Factory\RemoteObjectFactory;

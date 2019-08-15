@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony;
+namespace Ecotone\Symfony\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Config\ReferenceTypeFromNameResolver;
 use Ecotone\Messaging\Handler\TypeDescriptor;

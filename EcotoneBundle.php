@@ -5,6 +5,9 @@ namespace Ecotone\Symfony;
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Ecotone\Messaging\Handler\ExpressionEvaluationService;
 use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
+use Ecotone\Symfony\Command\ListAllPollableEndpointsCommand;
+use Ecotone\Symfony\Command\RunPollableEndpointCommand;
+use Ecotone\Symfony\DepedencyInjection\Compiler\EcotoneCompilerPass;
 use Ecotone\Symfony\DepedencyInjection\EcotoneExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -33,12 +36,6 @@ class EcotoneBundle extends Bundle
         $definition->setSynthetic(true);
         $definition->setPublic(true);
         $container->setDefinition(self::MESSAGING_SYSTEM_SERVICE_NAME, $definition);
-
-        $definition = new Definition();
-        $definition->setClass(SymfonyReferenceSearchService::class);
-        $definition->setPublic(true);
-        $definition->addArgument(new Reference('service_container'));
-        $container->setDefinition("symfonyReferenceSearchService", $definition);
 
         $definition = new Definition();
         $definition->setClass(ListAllPollableEndpointsCommand::class);

@@ -192,16 +192,16 @@
         },
         {
             "name": "ecotone/ecotone",
-            "version": "0.3.3",
+            "version": "0.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ecotoneframework/ecotone.git",
-                "reference": "fb3750d7cd7530e20ad926ab39c79bbefae7f727"
+                "reference": "bd4c690a558e4782f73aafe49089e9057618fc6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ecotoneframework/ecotone/zipball/fb3750d7cd7530e20ad926ab39c79bbefae7f727",
-                "reference": "fb3750d7cd7530e20ad926ab39c79bbefae7f727",
+                "url": "https://api.github.com/repos/ecotoneframework/ecotone/zipball/bd4c690a558e4782f73aafe49089e9057618fc6d",
+                "reference": "bd4c690a558e4782f73aafe49089e9057618fc6d",
                 "shasum": ""
             },
             "require": {
@@ -257,7 +257,7 @@
                 "query",
                 "spring"
             ],
-            "time": "2019-08-13T04:23:21+00:00"
+            "time": "2019-08-15T21:00:19+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -2872,19 +2872,23 @@
         },
         {
             "name": "netresearch/jsonmapper",
-            "version": "v1.5.2",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cweiske/jsonmapper.git",
-                "reference": "caf41ab74ac7252f5f46db6c16ab0a8358e2e55c"
+                "reference": "0d4d1b48d682a93b6bfedf60b88c7750e9cb0b06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cweiske/jsonmapper/zipball/caf41ab74ac7252f5f46db6c16ab0a8358e2e55c",
-                "reference": "caf41ab74ac7252f5f46db6c16ab0a8358e2e55c",
+                "url": "https://api.github.com/repos/cweiske/jsonmapper/zipball/0d4d1b48d682a93b6bfedf60b88c7750e9cb0b06",
+                "reference": "0d4d1b48d682a93b6bfedf60b88c7750e9cb0b06",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-reflection": "*",
+                "ext-spl": "*",
                 "php": ">=5.6"
             },
             "require-dev": {
@@ -2910,7 +2914,7 @@
                 }
             ],
             "description": "Map nested JSON structures onto PHP classes",
-            "time": "2019-08-04T19:56:28+00:00"
+            "time": "2019-08-15T19:41:25+00:00"
         },
         {
             "name": "phan/phan",

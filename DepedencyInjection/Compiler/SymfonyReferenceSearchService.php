@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ecotone\Symfony;
+namespace Ecotone\Symfony\DepedencyInjection\Compiler;
 
 
 use Ecotone\Messaging\Handler\ReferenceSearchService;

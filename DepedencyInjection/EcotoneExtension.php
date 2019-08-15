@@ -3,8 +3,7 @@
 
 namespace Ecotone\Symfony\DepedencyInjection;
 
-
-use Ecotone\Symfony\EcotoneCompilerPass;
+use Ecotone\Symfony\DepedencyInjection\Compiler\EcotoneCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 

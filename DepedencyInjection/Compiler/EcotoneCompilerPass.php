@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony;
+namespace Ecotone\Symfony\DepedencyInjection\Compiler;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
@@ -9,6 +9,7 @@ use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
 use Ecotone\Messaging\MessagingException;
 use Ecotone\Messaging\Support\InvalidArgumentException;
+use Ecotone\Symfony\EcotoneBundle;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -41,6 +42,12 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
             [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
         );
+
+        $definition = new Definition();
+        $definition->setClass(SymfonyReferenceSearchService::class);
+        $definition->setPublic(true);
+        $definition->addArgument(new Reference('service_container'));
+        $container->setDefinition("symfonyReferenceSearchService", $definition);
 
         $messagingConfiguration = MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
             realpath($container->getParameter('kernel.root_dir') . "/.."),

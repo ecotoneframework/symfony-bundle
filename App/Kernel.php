@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony;
+namespace Ecotone\Symfony\App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -22,6 +22,11 @@ class Kernel extends BaseKernel
     public function getLogDir()
     {
         return $this->getProjectDir().'/var/log';
+    }
+
+    public function getProjectDir(): string
+    {
+        return \dirname(__DIR__);
     }
 
     public function registerBundles()

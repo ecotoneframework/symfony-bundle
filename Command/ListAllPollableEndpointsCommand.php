@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony;
+namespace Ecotone\Symfony\Command;
 
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Symfony\Component\Console\Command\Command;
