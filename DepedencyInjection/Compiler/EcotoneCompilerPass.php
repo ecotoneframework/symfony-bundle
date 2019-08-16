@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony\DepedencyInjection\Compiler;
+namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
@@ -9,7 +9,7 @@ use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
 use Ecotone\Messaging\MessagingException;
 use Ecotone\Messaging\Support\InvalidArgumentException;
-use Ecotone\Symfony\EcotoneSymfonyBundle;
+use Ecotone\SymfonyBundle\EcotoneSymfonyBundle;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class IntegrationMessagingCompilerPass
- * @package Ecotone\Symfony
+ * @package Ecotone\SymfonyBundle
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class EcotoneCompilerPass implements CompilerPassInterface

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Ecotone\Symfony\DepedencyInjection;
+namespace Ecotone\SymfonyBundle\DepedencyInjection;
 
-use Ecotone\Symfony\DepedencyInjection\Compiler\EcotoneCompilerPass;
+use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\EcotoneCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace Ecotone\Symfony;
+namespace Ecotone\SymfonyBundle;
 
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Ecotone\Messaging\Handler\ExpressionEvaluationService;
 use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
-use Ecotone\Symfony\Command\ListAllPollableEndpointsCommand;
-use Ecotone\Symfony\Command\RunPollableEndpointCommand;
-use Ecotone\Symfony\DepedencyInjection\Compiler\EcotoneCompilerPass;
-use Ecotone\Symfony\DepedencyInjection\EcotoneExtension;
+use Ecotone\SymfonyBundle\Command\ListAllPollableEndpointsCommand;
+use Ecotone\SymfonyBundle\Command\RunPollableEndpointCommand;
+use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\EcotoneCompilerPass;
+use Ecotone\SymfonyBundle\DepedencyInjection\EcotoneExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Class IntegrationMessagingBundle
- * @package Ecotone\Symfony
+ * @package Ecotone\SymfonyBundle
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class EcotoneSymfonyBundle extends Bundle

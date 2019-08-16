@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ecotone\Symfony\DepedencyInjection;
+namespace Ecotone\SymfonyBundle\DepedencyInjection;
 
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

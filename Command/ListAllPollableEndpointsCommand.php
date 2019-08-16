@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony\Command;
+namespace Ecotone\SymfonyBundle\Command;
 
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Symfony\Component\Console\Command\Command;
@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ListAllAsynchronousConsumers
- * @package Ecotone\Symfony
+ * @package Ecotone\SymfonyBundle
  * @author  Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class ListAllPollableEndpointsCommand extends Command

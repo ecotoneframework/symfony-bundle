@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony\DepedencyInjection\Compiler;
+namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Config\ReferenceTypeFromNameResolver;
 use Ecotone\Messaging\Handler\TypeDescriptor;
@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class SymfonyReferenceTypeResolver
- * @package Ecotone\Symfony
+ * @package Ecotone\SymfonyBundle
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
 class SymfonyReferenceTypeResolver implements ReferenceTypeFromNameResolver

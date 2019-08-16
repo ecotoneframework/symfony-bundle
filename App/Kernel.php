@@ -1,6 +1,6 @@
 <?php
 
-namespace Ecotone\Symfony\App;
+namespace Ecotone\SymfonyBundle\App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;

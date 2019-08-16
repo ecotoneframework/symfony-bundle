@@ -1,6 +1,6 @@
 <?php
 
-use Ecotone\Symfony\EcotoneSymfonyBundle;
+use Ecotone\SymfonyBundle\EcotoneSymfonyBundle;
 use Fixture\TestBundle;
 
 return [
