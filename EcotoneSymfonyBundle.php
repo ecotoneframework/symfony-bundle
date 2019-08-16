@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * @package Ecotone\Symfony
  * @author Dariusz Gafka <dgafka.mail@gmail.com>
  */
-class EcotoneBundle extends Bundle
+class EcotoneSymfonyBundle extends Bundle
 {
     const MESSAGING_SYSTEM_SERVICE_NAME = "messaging_system";
     const MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME = "messaging_system_configuration";

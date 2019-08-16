@@ -1,5 +1,5 @@
 {
-    "name": "ecotone/symfony",
+    "name": "ecotone/symfony-bundle",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [

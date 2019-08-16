@@ -9,7 +9,7 @@ use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
 use Ecotone\Messaging\MessagingException;
 use Ecotone\Messaging\Support\InvalidArgumentException;
-use Ecotone\Symfony\EcotoneBundle;
+use Ecotone\Symfony\EcotoneSymfonyBundle;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -83,6 +83,6 @@ class EcotoneCompilerPass implements CompilerPassInterface
 
         $path = $container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . 'ecotoneMessagingConfiguration';
         file_put_contents($path, serialize($messagingConfiguration));
-        $container->setParameter(EcotoneBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, $path);
+        $container->setParameter(EcotoneSymfonyBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, $path);
     }
 }

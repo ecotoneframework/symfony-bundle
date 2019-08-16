@@ -4,7 +4,7 @@ namespace Ecotone\Symfony\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
-use Ecotone\Symfony\EcotoneBundle;
+use Ecotone\Symfony\EcotoneSymfonyBundle;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\RemoteObject\AdapterInterface;
 use ProxyManager\Factory\RemoteObjectFactory;
@@ -71,7 +71,7 @@ class ProxyGenerator
             public function call(string $wrappedClass, string $method, array $params = [])
             {
                 /** @var MessagingSystem $messagingSystem */
-                $messagingSystem = $this->container->get(EcotoneBundle::MESSAGING_SYSTEM_SERVICE_NAME);
+                $messagingSystem = $this->container->get(EcotoneSymfonyBundle::MESSAGING_SYSTEM_SERVICE_NAME);
 
                 return call_user_func_array([$messagingSystem->getGatewayByName($this->referenceName), $method], $params);
             }
