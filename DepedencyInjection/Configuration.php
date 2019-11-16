@@ -13,15 +13,16 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('ecotone');
 
-        $treeBuilder->getRootNode()
-            ->children()
-                ->booleanNode("loadSrc")
-                    ->defaultTrue()
-                ->end()
-                ->booleanNode("failFast")
-                ->end()
-                ->arrayNode("namespaces")
-                    ->scalarPrototype()
+        $treeBuilder
+            ->root("ecotone")
+                ->children()
+                    ->booleanNode("loadSrc")
+                        ->defaultTrue()
+                    ->end()
+                    ->booleanNode("failFast")
+                    ->end()
+                    ->arrayNode("namespaces")
+                        ->prototype('scalar')
                     ->end()
                 ->end()
             ->end();
