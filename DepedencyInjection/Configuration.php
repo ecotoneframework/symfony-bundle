@@ -14,7 +14,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('ecotone');
 
         $treeBuilder
-            ->root("ecotone")
+            ->getRootNode()
                 ->children()
                     ->booleanNode("loadSrc")
                         ->defaultTrue()
@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode("failFast")
                     ->end()
                     ->arrayNode("namespaces")
-                        ->prototype('scalar')
+                      ->scalarPrototype()
                     ->end()
                 ->end()
             ->end();
