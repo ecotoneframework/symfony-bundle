@@ -50,7 +50,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
         $container->setDefinition("symfonyReferenceSearchService", $definition);
 
         $messagingConfiguration = MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
-            realpath($container->getParameter('kernel.root_dir') . "/.."),
+            realpath(($container->hasParameter('kernel.project_dir') ? $container->getParameter('kernel.project_dir') : $container->getParameter('kernel.root_dir'). "/..")),
             $namespaces,
             new SymfonyReferenceTypeResolver($container),
             $container->getParameter("kernel.environment"),
