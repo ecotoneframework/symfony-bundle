@@ -47,5 +47,7 @@ class RunPollableEndpointCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->configuredMessagingSystem->runSeparatelyRunningEndpointBy($input->getArgument("name"));
+        
+        return 0;
     }
 }

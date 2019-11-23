@@ -56,5 +56,7 @@ class ListAllPollableEndpointsCommand extends Command
             ->setRows($repackedNames)
         ;
         $table->render();
+
+        return 0;
     }
 }
