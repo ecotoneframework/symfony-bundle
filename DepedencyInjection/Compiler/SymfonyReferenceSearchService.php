@@ -23,8 +23,13 @@ class SymfonyReferenceSearchService implements ReferenceSearchService
         $this->container = $container;
     }
 
-    public function get(string $reference)
+    public function get(string $reference) : object
     {
         return $this->container->get($reference . '-proxy');
+    }
+
+    public function has(string $referenceName): bool
+    {
+        return $this->container->has($referenceName);
     }
 }
