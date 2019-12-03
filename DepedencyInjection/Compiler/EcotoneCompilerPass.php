@@ -81,6 +81,16 @@ class EcotoneCompilerPass implements CompilerPassInterface
             }
         }
 
+        foreach ($messagingConfiguration->getOptionalReferences() as $requiredReference) {
+            if ($container->has($requiredReference)) {
+                $alias = $container->setAlias($requiredReference . '-proxy', $requiredReference);
+
+                if ($alias) {
+                    $alias->setPublic(true);
+                }
+            }
+        }
+
         $path = $container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . 'ecotoneMessagingConfiguration';
         file_put_contents($path, serialize($messagingConfiguration));
         $container->setParameter(EcotoneSymfonyBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, $path);
