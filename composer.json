@@ -12,12 +12,11 @@
     "description": "Extends Ecotone with Symfony integration",
     "require": {
         "php": "^7.3",
-        "ecotone/ecotone": "^0.5.0@dev",
+        "ecotone/ecotone": "^0.6.0@dev",
         "symfony/console": "^3.3|^4.0|^5.0",
         "symfony/framework-bundle": "^3.2|^4.0|^5.0"
     },
     "require-dev": {
-        "symfony/dotenv": "^4.0",
         "phpunit/phpunit": "^6.2.3",
         "behat/behat": "^3.3.1",
         "behat/symfony2-extension": "^2.1",

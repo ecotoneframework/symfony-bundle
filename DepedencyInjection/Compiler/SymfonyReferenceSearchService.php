@@ -6,19 +6,20 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Handler\ReferenceSearchService;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SymfonyReferenceSearchService implements ReferenceSearchService
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
      *  constructor.
-     * @param Container $container
+     * @param ContainerInterface $container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

@@ -3,11 +3,14 @@
 namespace Ecotone\SymfonyBundle;
 
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
+use Ecotone\Messaging\Config\MessagingSystemConfiguration;
+use Ecotone\Messaging\Config\ReferenceTypeFromNameResolver;
 use Ecotone\Messaging\Handler\ExpressionEvaluationService;
 use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
 use Ecotone\SymfonyBundle\Command\ListAllPollableEndpointsCommand;
 use Ecotone\SymfonyBundle\Command\RunPollableEndpointCommand;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\EcotoneCompilerPass;
+use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\SymfonyReferenceTypeResolver;
 use Ecotone\SymfonyBundle\DepedencyInjection\EcotoneExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -73,10 +76,12 @@ class EcotoneSymfonyBundle extends Bundle
 
     public function boot()
     {
-        $messagingSystem = (
-        unserialize(file_get_contents($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME)))
-        )->buildMessagingSystemFromConfiguration($this->container->get('symfonyReferenceSearchService'));
-
+        $configuration = MessagingSystemConfiguration::prepare(
+            EcotoneCompilerPass::getRootProjectPath($this->container),
+            new SymfonyReferenceTypeResolver($this->container),
+            unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME))
+        );
+        $messagingSystem = $configuration->buildMessagingSystemFromConfiguration($this->container->get('symfonyReferenceSearchService'));
 
         $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
     }

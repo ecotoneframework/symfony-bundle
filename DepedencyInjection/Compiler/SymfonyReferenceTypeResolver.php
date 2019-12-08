@@ -4,6 +4,7 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Config\ReferenceTypeFromNameResolver;
 use Ecotone\Messaging\Handler\TypeDescriptor;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -15,15 +16,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class SymfonyReferenceTypeResolver implements ReferenceTypeFromNameResolver
 {
     /**
-     * @var ContainerBuilder
+     * @var ContainerBuilder|ContainerInterface
      */
     private $container;
 
     /**
      * SymfonyReferenceTypeResolver constructor.
-     * @param ContainerBuilder $container
+     * @param $container
      */
-    public function __construct(ContainerBuilder $container)
+    public function __construct($container)
     {
         $this->container = $container;
     }
@@ -36,6 +37,10 @@ class SymfonyReferenceTypeResolver implements ReferenceTypeFromNameResolver
      */
     public function resolve(string $referenceName): TypeDescriptor
     {
-        return TypeDescriptor::create($this->container->getDefinition($referenceName)->getClass());
+        if ($this->container instanceof ContainerBuilder) {
+            return TypeDescriptor::create($this->container->getDefinition($referenceName)->getClass());
+        }else {
+            return TypeDescriptor::create(get_class($this->container->get($referenceName)));
+        }
     }
 }

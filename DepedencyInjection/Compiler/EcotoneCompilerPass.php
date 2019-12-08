@@ -4,14 +4,17 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
+use Ecotone\Messaging\Config\ApplicationConfiguration;
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
 use Ecotone\Messaging\MessagingException;
 use Ecotone\Messaging\Support\InvalidArgumentException;
 use Ecotone\SymfonyBundle\EcotoneSymfonyBundle;
+use Psr\Container\ContainerInterface;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -26,6 +29,16 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public const WORKING_NAMESPACES_CONFIG = "ecotone.namespaces";
     public const FAIL_FAST_CONFIG = "ecotone.fail_fast";
     public const LOAD_SRC = "ecotone.load_src";
+    public const SERIALIZATION_DEFAULT_MEDIA_TYPE = "ecotone.serializationMediaType";
+
+    /**
+     * @param Container $container
+     * @return bool|string
+     */
+    public static function getRootProjectPath(Container $container)
+    {
+        return realpath(($container->hasParameter('kernel.project_dir') ? $container->getParameter('kernel.project_dir') : $container->getParameter('kernel.root_dir') . "/.."));
+    }
 
     /**
      * @param ContainerBuilder $container
@@ -38,9 +51,26 @@ class EcotoneCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $namespaces = array_merge(
-            $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
-            [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
+        $applicationConfiguration = ApplicationConfiguration::createWithDefaults()
+            ->withEnvironment($container->getParameter("kernel.environment"))
+            ->withFailFast($container->getParameter("kernel.environment") === "prod" ? false : $container->getParameter(self::FAIL_FAST_CONFIG))
+            ->withLoadSrc($container->getParameter(self::LOAD_SRC))
+            ->withNamespaces(array_merge(
+                $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
+                [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
+            ))
+            ->withCacheDirectoryPath($container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . "ecotone");
+
+        if ($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE)) {
+            $applicationConfiguration = $applicationConfiguration
+                                        ->withDefaultSerializationMediaType($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE));
+        }
+
+        MessagingSystemConfiguration::cleanCache($applicationConfiguration);
+        $messagingConfiguration = MessagingSystemConfiguration::prepare(
+            self::getRootProjectPath($container),
+            new SymfonyReferenceTypeResolver($container),
+            $applicationConfiguration
         );
 
         $definition = new Definition();
@@ -48,16 +78,6 @@ class EcotoneCompilerPass implements CompilerPassInterface
         $definition->setPublic(true);
         $definition->addArgument(new Reference('service_container'));
         $container->setDefinition("symfonyReferenceSearchService", $definition);
-
-        $messagingConfiguration = MessagingSystemConfiguration::createWithCachedReferenceObjectsForNamespaces(
-            realpath(($container->hasParameter('kernel.project_dir') ? $container->getParameter('kernel.project_dir') : $container->getParameter('kernel.root_dir'). "/..")),
-            $namespaces,
-            new SymfonyReferenceTypeResolver($container),
-            $container->getParameter("kernel.environment"),
-            $container->getParameter(self::FAIL_FAST_CONFIG),
-            $container->getParameter(self::LOAD_SRC),
-            ProxyFactory::createWithCache($container->getParameter("kernel.cache_dir"))
-        );
 
         foreach ($messagingConfiguration->getRegisteredGateways() as $gatewayProxyBuilder) {
             $definition = new Definition();
@@ -91,8 +111,6 @@ class EcotoneCompilerPass implements CompilerPassInterface
             }
         }
 
-        $path = $container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . 'ecotoneMessagingConfiguration';
-        file_put_contents($path, serialize($messagingConfiguration));
-        $container->setParameter(EcotoneSymfonyBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, $path);
+        $container->setParameter(EcotoneSymfonyBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, serialize($applicationConfiguration));
     }
 }
