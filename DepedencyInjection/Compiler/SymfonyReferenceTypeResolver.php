@@ -3,9 +3,11 @@
 namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Config\ReferenceTypeFromNameResolver;
+use Ecotone\Messaging\Handler\Type;
+use Ecotone\Messaging\Handler\TypeDefinitionException;
 use Ecotone\Messaging\Handler\TypeDescriptor;
+use Ecotone\Messaging\MessagingException;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -31,15 +33,15 @@ class SymfonyReferenceTypeResolver implements ReferenceTypeFromNameResolver
 
     /**
      * @param string $referenceName
-     * @return TypeDescriptor
-     * @throws \Ecotone\Messaging\Handler\TypeDefinitionException
-     * @throws \Ecotone\Messaging\MessagingException
+     * @return Type
+     * @throws TypeDefinitionException
+     * @throws MessagingException
      */
-    public function resolve(string $referenceName): TypeDescriptor
+    public function resolve(string $referenceName): Type
     {
         if ($this->container instanceof ContainerBuilder) {
             return TypeDescriptor::create($this->container->getDefinition($referenceName)->getClass());
-        }else {
+        } else {
             return TypeDescriptor::create(get_class($this->container->get($referenceName)));
         }
     }
