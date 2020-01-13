@@ -19,5 +19,6 @@ class EcotoneExtension extends Extension
         $container->setParameter(EcotoneCompilerPass::LOAD_SRC, $config['loadSrc']);
         $container->setParameter(EcotoneCompilerPass::FAIL_FAST_CONFIG, $config['failFast']);
         $container->setParameter(EcotoneCompilerPass::SERIALIZATION_DEFAULT_MEDIA_TYPE, $config['serializationMediaType']);
+        $container->setParameter(EcotoneCompilerPass::ERROR_CHANNEL, $config['errorChannel']);
     }
 }

@@ -30,6 +30,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public const FAIL_FAST_CONFIG = "ecotone.fail_fast";
     public const LOAD_SRC = "ecotone.load_src";
     public const SERIALIZATION_DEFAULT_MEDIA_TYPE = "ecotone.serializationMediaType";
+    public const ERROR_CHANNEL = "ecotone.errorChannel";
 
     /**
      * @param Container $container
@@ -65,6 +66,11 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $applicationConfiguration = $applicationConfiguration
                                         ->withDefaultSerializationMediaType($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE));
         }
+        if ($container->getParameter(self::ERROR_CHANNEL)) {
+            $applicationConfiguration = $applicationConfiguration
+                                        ->withDefaultErrorChannel($container->getParameter(self::ERROR_CHANNEL));
+        }
+
 
         MessagingSystemConfiguration::cleanCache($applicationConfiguration);
         $messagingConfiguration = MessagingSystemConfiguration::prepare(
