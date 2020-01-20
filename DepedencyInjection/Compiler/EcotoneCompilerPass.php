@@ -31,6 +31,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public const LOAD_SRC = "ecotone.load_src";
     public const SERIALIZATION_DEFAULT_MEDIA_TYPE = "ecotone.serializationMediaType";
     public const ERROR_CHANNEL = "ecotone.errorChannel";
+    public const POLLABLE_ENDPOINTS = "ecotone.pollableEndpoints";
 
     /**
      * @param Container $container
@@ -52,6 +53,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        $pollableEndpoints = $container->hasParameter(EcotoneCompilerPass::POLLABLE_ENDPOINTS) ? unserialize($container->getParameter(EcotoneCompilerPass::POLLABLE_ENDPOINTS)) : [];
         $applicationConfiguration = ApplicationConfiguration::createWithDefaults()
             ->withEnvironment($container->getParameter("kernel.environment"))
             ->withFailFast($container->getParameter("kernel.environment") === "prod" ? false : $container->getParameter(self::FAIL_FAST_CONFIG))
@@ -60,7 +62,8 @@ class EcotoneCompilerPass implements CompilerPassInterface
                 $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
                 [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
             ))
-            ->withCacheDirectoryPath($container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . "ecotone");
+            ->withCacheDirectoryPath($container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . "ecotone")
+            ->withPollableEndpointAnnotations($pollableEndpoints);
 
         if ($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE)) {
             $applicationConfiguration = $applicationConfiguration

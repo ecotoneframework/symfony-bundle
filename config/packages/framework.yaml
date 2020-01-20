@@ -33,3 +33,6 @@ framework:
 ecotone:
     namespaces:
         - "Fixture"
+    pollableAnnotations:
+        class: Ecotone\SymfonyBundle\App\ConfigurationExample
+        method: getEndpointAnnotations
