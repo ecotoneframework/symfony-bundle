@@ -33,10 +33,6 @@ class ProxyGenerator
     {
         if ($isLazyLoaded) {
             $proxyFactory = ProxyFactory::createWithCache($cacheDirectoryPath);
-
-            if (!$proxyFactory->hasCachedVersion($interface)) {
-                throw ConfigurationException::create("There is problem with configuration. Proxy class for {$interface} was not pregenerated for symfony bundle. Can't use lazy loading configuration.");
-            }
         }else {
             $proxyFactory = ProxyFactory::createNoCache();
         }
