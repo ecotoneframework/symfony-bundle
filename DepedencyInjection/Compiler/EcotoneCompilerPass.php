@@ -53,7 +53,8 @@ class EcotoneCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $pollableEndpoints = $container->hasParameter(EcotoneCompilerPass::POLLABLE_ENDPOINTS) ? unserialize($container->getParameter(EcotoneCompilerPass::POLLABLE_ENDPOINTS)) : [];
+        $pollableEndpoints        = $container->hasParameter(EcotoneCompilerPass::POLLABLE_ENDPOINTS) ? unserialize($container->getParameter(EcotoneCompilerPass::POLLABLE_ENDPOINTS)) : [];
+        $ecotoneCacheDirectory       = $container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . "ecotone";
         $applicationConfiguration = ApplicationConfiguration::createWithDefaults()
             ->withEnvironment($container->getParameter("kernel.environment"))
             ->withFailFast($container->getParameter("kernel.environment") === "prod" ? false : $container->getParameter(self::FAIL_FAST_CONFIG))
@@ -62,7 +63,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
                 $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
                 [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
             ))
-            ->withCacheDirectoryPath($container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . "ecotone")
+            ->withCacheDirectoryPath($ecotoneCacheDirectory)
             ->withPollableEndpointAnnotations($pollableEndpoints);
 
         if ($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE)) {
@@ -95,7 +96,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $definition->addArgument($gatewayProxyBuilder->getReferenceName());
             $definition->addArgument(new Reference('service_container'));
             $definition->addArgument($gatewayProxyBuilder->getInterfaceName());
-            $definition->addArgument("%kernel.cache_dir%");
+            $definition->addArgument($ecotoneCacheDirectory);
             $definition->addArgument($container->getParameter(self::FAIL_FAST_CONFIG));
             $definition->setPublic(true);
 

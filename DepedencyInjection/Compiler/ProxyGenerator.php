@@ -31,12 +31,7 @@ class ProxyGenerator
      */
     public static function createFor(string $referenceName, Container $container, string $interface, string $cacheDirectoryPath, bool $isLazyLoaded)
     {
-        if ($isLazyLoaded) {
-            $proxyFactory = ProxyFactory::createWithCache($cacheDirectoryPath);
-        }else {
-            $proxyFactory = ProxyFactory::createNoCache();
-        }
-
+        $proxyFactory = ProxyFactory::createWithCache($cacheDirectoryPath);
         $factory = new RemoteObjectFactory(new class ($container, $referenceName) implements AdapterInterface
         {
 
