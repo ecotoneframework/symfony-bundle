@@ -74,7 +74,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $applicationConfiguration = $applicationConfiguration
                                         ->withDefaultErrorChannel($container->getParameter(self::ERROR_CHANNEL));
         }
-        
+
         $messagingConfiguration = MessagingSystemConfiguration::prepare(
             self::getRootProjectPath($container),
             new SymfonyReferenceTypeResolver($container),

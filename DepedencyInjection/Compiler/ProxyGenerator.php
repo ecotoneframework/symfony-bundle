@@ -64,7 +64,9 @@ class ProxyGenerator
                 /** @var MessagingSystem $messagingSystem */
                 $messagingSystem = $this->container->get(EcotoneSymfonyBundle::MESSAGING_SYSTEM_SERVICE_NAME);
 
-                return call_user_func_array([$messagingSystem->getGatewayByName($this->referenceName), $method], $params);
+                $nonProxyCombinedGateway = $messagingSystem->getNonProxyGatewayByName($this->referenceName);
+
+                return $nonProxyCombinedGateway->executeMethod($method, $params);
             }
         }, $proxyFactory->getConfiguration());
 
