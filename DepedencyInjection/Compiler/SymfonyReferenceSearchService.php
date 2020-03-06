@@ -31,6 +31,6 @@ class SymfonyReferenceSearchService implements ReferenceSearchService
 
     public function has(string $referenceName): bool
     {
-        return $this->container->has($referenceName);
+        return $this->container->has($referenceName . '-proxy');
     }
 }
