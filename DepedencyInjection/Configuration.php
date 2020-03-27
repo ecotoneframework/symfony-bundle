@@ -17,9 +17,6 @@ class Configuration implements ConfigurationInterface
         if (method_exists($treeBuilder, "root")) {
             $treeBuilder->root("ecotone")
                 ->children()
-                ->booleanNode("loadSrc")
-                ->defaultTrue()
-                ->end()
                 ->booleanNode("failFast")
                 ->defaultTrue()
                 ->end()
@@ -48,9 +45,6 @@ class Configuration implements ConfigurationInterface
             $treeBuilder
                 ->getRootNode()
                 ->children()
-                ->booleanNode("loadSrc")
-                ->defaultTrue()
-                ->end()
                 ->booleanNode("failFast")
                 ->defaultTrue()
                 ->end()

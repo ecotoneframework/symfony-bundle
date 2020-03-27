@@ -32,6 +32,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public const SERIALIZATION_DEFAULT_MEDIA_TYPE = "ecotone.serializationMediaType";
     public const ERROR_CHANNEL = "ecotone.errorChannel";
     public const POLLABLE_ENDPOINTS = "ecotone.pollableEndpoints";
+    const SRC_CATALOG = "src";
 
     /**
      * @param Container $container
@@ -58,7 +59,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
         $applicationConfiguration = ApplicationConfiguration::createWithDefaults()
             ->withEnvironment($container->getParameter("kernel.environment"))
             ->withFailFast($container->getParameter("kernel.environment") === "prod" ? false : $container->getParameter(self::FAIL_FAST_CONFIG))
-            ->withLoadSrc($container->getParameter(self::LOAD_SRC))
+            ->withLoadCatalog(self::SRC_CATALOG)
             ->withNamespaces(array_merge(
                 $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
                 [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
