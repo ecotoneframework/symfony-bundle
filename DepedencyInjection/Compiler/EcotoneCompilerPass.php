@@ -57,7 +57,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
         $applicationConfiguration = ApplicationConfiguration::createWithDefaults()
             ->withEnvironment($container->getParameter("kernel.environment"))
             ->withFailFast($container->getParameter("kernel.environment") === "prod" ? false : $container->getParameter(self::FAIL_FAST_CONFIG))
-            ->withLoadCatalog($container->getParameter(self::LOAD_SRC))
+            ->withLoadCatalog($container->getParameter(self::LOAD_SRC) ? "src" : "")
             ->withNamespaces(array_merge(
                 $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
                 [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
