@@ -15,45 +15,97 @@ class Configuration implements ConfigurationInterface
 
 //        symfony 3
         if (method_exists($treeBuilder, "root")) {
-            $treeBuilder->root("ecotone")
-                ->children()
-                ->booleanNode("failFast")
-                ->defaultTrue()
-                ->end()
-                ->booleanNode("loadSrcNamespaces")
-                ->defaultTrue()
-                ->end()
-                ->scalarNode("serializationMediaType")
-                ->defaultNull()
-                ->end()
-                ->scalarNode("errorChannel")
-                ->defaultNull()
-                ->end()
-                ->arrayNode("namespaces")
-                ->scalarPrototype()->end()
-                ->end()
-                ->end()
+            $treeBuilder
+                ->root("ecotone")
+                    ->children()
+                        ->booleanNode("failFast")
+                        ->defaultTrue()
+                        ->end()
+
+                        ->booleanNode("loadSrcNamespaces")
+                        ->defaultTrue()
+                        ->end()
+
+                        ->scalarNode("serializationMediaType")
+                        ->defaultNull()
+                        ->end()
+
+                        ->scalarNode("defaultErrorChannel")
+                        ->defaultNull()
+                        ->end()
+
+                        ->arrayNode("namespaces")
+                            ->scalarPrototype()
+                            ->end()
+                        ->end()
+
+                        ->integerNode("defaultMemoryLimit")
+                        ->isRequired()
+                        ->end()
+
+                        ->arrayNode("defaultChannelPollRetry")
+                            ->children()
+                                ->integerNode('initialDelay')
+                                ->isRequired()
+                                ->end()
+                                ->integerNode('maxAttempts')
+                                ->isRequired()
+                                ->end()
+                                ->integerNode('multiplier')
+                                ->isRequired()
+                                ->end()
+                            ->end()
+                        ->end()
+
+                    ->end()
                 ->end();
         } else {
             $treeBuilder
                 ->getRootNode()
-                ->children()
-                ->booleanNode("failFast")
-                ->defaultTrue()
-                ->end()
-                ->booleanNode("loadSrcNamespaces")
-                ->defaultTrue()
-                ->end()
-                ->scalarNode("serializationMediaType")
-                ->defaultNull()
-                ->end()
-                ->scalarNode("errorChannel")
-                ->defaultNull()
-                ->end()
-                ->arrayNode("namespaces")
-                ->scalarPrototype()->end()
-                ->end()
-                ->end()
+                    ->children()
+                        ->booleanNode("failFast")
+                        ->defaultTrue()
+                        ->end()
+
+                        ->booleanNode("loadSrcNamespaces")
+                        ->defaultTrue()
+                        ->end()
+
+                        ->scalarNode("serializationMediaType")
+                        ->defaultNull()
+                        ->end()
+
+                        ->scalarNode("defaultErrorChannel")
+                        ->defaultNull()
+                        ->end()
+
+
+                        ->arrayNode("namespaces")
+                            ->scalarPrototype()
+                            ->end()
+                        ->end()
+
+                        ->integerNode("defaultMemoryLimit")
+                        ->isRequired()
+                        ->end()
+
+                        ->arrayNode("defaultChannelPollRetry")
+                            ->children()
+                                ->integerNode('initialDelay')
+                                ->isRequired()
+                                ->end()
+
+                                ->integerNode('maxAttempts')
+                                ->isRequired()
+                                ->end()
+
+                                ->integerNode('multiplier')
+                                ->isRequired()
+                                ->end()
+                                ->end()
+                        ->end()
+
+                    ->end()
                 ->end();
         }
 

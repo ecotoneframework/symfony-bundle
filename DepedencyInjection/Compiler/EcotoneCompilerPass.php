@@ -7,6 +7,7 @@ use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
 use Ecotone\Messaging\Config\ApplicationConfiguration;
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
+use Ecotone\Messaging\Handler\ErrorHandler\RetryTemplateBuilder;
 use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
 use Ecotone\Messaging\MessagingException;
 use Ecotone\Messaging\Support\InvalidArgumentException;
@@ -31,6 +32,8 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public const LOAD_SRC = "ecotone.load_src";
     public const SERIALIZATION_DEFAULT_MEDIA_TYPE = "ecotone.serializationMediaType";
     public const ERROR_CHANNEL = "ecotone.errorChannel";
+    public const DEFAULT_MEMORY_LIMIT = "ecotone.defaultMemoryLimit";
+    public const DEFAULT_CHANNEL_POLL_RETRY = "ecotone.defaultChannelPollRetry";
     const SRC_CATALOG = "src";
 
     /**
@@ -67,6 +70,19 @@ class EcotoneCompilerPass implements CompilerPassInterface
         if ($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE)) {
             $applicationConfiguration = $applicationConfiguration
                                         ->withDefaultSerializationMediaType($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE));
+        }
+        if ($container->getParameter(self::DEFAULT_MEMORY_LIMIT)) {
+            $applicationConfiguration = $applicationConfiguration
+                ->withConsumerMemoryLimit($container->getParameter(self::DEFAULT_MEMORY_LIMIT));
+        }
+        if ($container->getParameter(self::DEFAULT_CHANNEL_POLL_RETRY)) {
+            $retryTemplate = $container->getParameter(self::DEFAULT_CHANNEL_POLL_RETRY);
+            $applicationConfiguration = $applicationConfiguration
+                ->withChannelPollRetryTemplate(RetryTemplateBuilder::exponentialBackoffWithMaxDelay(
+                    $retryTemplate["initialDelay"],
+                    $retryTemplate["maxAttempts"],
+                    $retryTemplate["multiplier"]
+                ));
         }
         if ($container->getParameter(self::ERROR_CHANNEL)) {
             $applicationConfiguration = $applicationConfiguration

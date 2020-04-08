@@ -33,3 +33,9 @@ framework:
 ecotone:
     namespaces:
         - "Fixture"
+    defaultMemoryLimit: 256
+    defaultChannelPollRetry:
+        initialDelay: 100
+        maxAttempts: 3
+        multiplier: 2
+    defaultErrorChannel: "errorChannel"
