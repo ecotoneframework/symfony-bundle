@@ -21,6 +21,6 @@ class EcotoneExtension extends Extension
         $container->setParameter(EcotoneCompilerPass::SERIALIZATION_DEFAULT_MEDIA_TYPE, $config['serializationMediaType']);
         $container->setParameter(EcotoneCompilerPass::ERROR_CHANNEL, $config['defaultErrorChannel']);
         $container->setParameter(EcotoneCompilerPass::DEFAULT_MEMORY_LIMIT, $config['defaultMemoryLimit']);
-        $container->setParameter(EcotoneCompilerPass::DEFAULT_CHANNEL_POLL_RETRY, $config['defaultChannelPollRetry']);
+        $container->setParameter(EcotoneCompilerPass::DEFAULT_CHANNEL_POLL_RETRY, isset($config['defaultChannelPollRetry']) ? $config['defaultChannelPollRetry'] : null);
     }
 }
