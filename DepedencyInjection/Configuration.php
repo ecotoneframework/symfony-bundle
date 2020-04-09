@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
 
                         ->integerNode("defaultMemoryLimit")
-                        ->isRequired()
+                        ->defaultNull()
                         ->end()
 
                         ->arrayNode("defaultChannelPollRetry")
@@ -86,7 +86,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
 
                         ->integerNode("defaultMemoryLimit")
-                        ->isRequired()
+                        ->defaultNull()
                         ->end()
 
                         ->arrayNode("defaultChannelPollRetry")
