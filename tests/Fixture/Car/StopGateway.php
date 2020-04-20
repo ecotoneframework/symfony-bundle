@@ -2,8 +2,8 @@
 
 namespace Fixture\Car;
 
-use Ecotone\Messaging\Annotation\Gateway;
 use Ecotone\Messaging\Annotation\MessageEndpoint;
+use Ecotone\Messaging\Annotation\MessageGateway;
 
 /**
  * Interface StopGateway
@@ -16,7 +16,7 @@ interface StopGateway
     const CHANNEL_NAME = 'stopChannel';
 
     /**
-     * @Gateway(
+     * @MessageGateway(
      *     requestChannel=StopGateway::CHANNEL_NAME
      * )
      */

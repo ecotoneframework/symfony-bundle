@@ -2,8 +2,8 @@
 
 namespace Fixture\Car;
 
-use Ecotone\Messaging\Annotation\Gateway;
 use Ecotone\Messaging\Annotation\MessageEndpoint;
+use Ecotone\Messaging\Annotation\MessageGateway;
 
 /**
  * Interface GetSpeedGateway
@@ -17,7 +17,7 @@ interface GetSpeedGateway
 
     /**
      * @return int
-     * @Gateway(
+     * @MessageGateway(
      *     requestChannel=GetSpeedGateway::CHANNEL_NAME
      * )
      */

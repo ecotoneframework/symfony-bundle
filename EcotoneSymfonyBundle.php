@@ -7,8 +7,8 @@ use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Config\ReferenceTypeFromNameResolver;
 use Ecotone\Messaging\Handler\ExpressionEvaluationService;
 use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
-use Ecotone\SymfonyBundle\Command\ListAllPollableEndpointsCommand;
-use Ecotone\SymfonyBundle\Command\RunPollableEndpointCommand;
+use Ecotone\SymfonyBundle\Command\ListAllAsynchronousEndpointsCommand;
+use Ecotone\SymfonyBundle\Command\RunAsynchronousEndpointCommand;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\EcotoneCompilerPass;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\SymfonyReferenceTypeResolver;
 use Ecotone\SymfonyBundle\DepedencyInjection\EcotoneExtension;
@@ -41,16 +41,16 @@ class EcotoneSymfonyBundle extends Bundle
         $container->setDefinition(self::MESSAGING_SYSTEM_SERVICE_NAME, $definition);
 
         $definition = new Definition();
-        $definition->setClass(ListAllPollableEndpointsCommand::class);
+        $definition->setClass(ListAllAsynchronousEndpointsCommand::class);
         $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
         $definition->addTag('console.command');
-        $container->setDefinition(ListAllPollableEndpointsCommand::class, $definition);
+        $container->setDefinition(ListAllAsynchronousEndpointsCommand::class, $definition);
 
         $definition = new Definition();
-        $definition->setClass(RunPollableEndpointCommand::class);
+        $definition->setClass(RunAsynchronousEndpointCommand::class);
         $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
         $definition->addTag('console.command');
-        $container->setDefinition(RunPollableEndpointCommand::class, $definition);
+        $container->setDefinition(RunAsynchronousEndpointCommand::class, $definition);
     }
 
     /**

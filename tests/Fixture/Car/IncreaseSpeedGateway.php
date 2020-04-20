@@ -2,8 +2,8 @@
 
 namespace Fixture\Car;
 
-use Ecotone\Messaging\Annotation\Gateway;
 use Ecotone\Messaging\Annotation\MessageEndpoint;
+use Ecotone\Messaging\Annotation\MessageGateway;
 
 /**
  * Interface IncreaseSpeedGateway
@@ -16,7 +16,7 @@ interface IncreaseSpeedGateway
     const CHANNEL_NAME = 'speedChannel';
 
     /**
-     * @Gateway(
+     * @MessageGateway(
      *     requestChannel=IncreaseSpeedGateway::CHANNEL_NAME
      * )
      * @param int $amount
