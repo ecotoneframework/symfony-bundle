@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
                         ->defaultTrue()
                         ->end()
 
-                        ->scalarNode("serializationMediaType")
+                        ->scalarNode("defaultSerializationMediaType")
                         ->defaultNull()
                         ->end()
 
@@ -43,7 +43,7 @@ class Configuration implements ConfigurationInterface
                         ->defaultNull()
                         ->end()
 
-                        ->arrayNode("defaultChannelPollRetry")
+                        ->arrayNode("defaultConnectionExceptionRetry")
                             ->children()
                                 ->integerNode('initialDelay')
                                 ->isRequired()
@@ -71,7 +71,7 @@ class Configuration implements ConfigurationInterface
                         ->defaultTrue()
                         ->end()
 
-                        ->scalarNode("serializationMediaType")
+                        ->scalarNode("defaultSerializationMediaType")
                         ->defaultNull()
                         ->end()
 
@@ -89,7 +89,7 @@ class Configuration implements ConfigurationInterface
                         ->defaultNull()
                         ->end()
 
-                        ->arrayNode("defaultChannelPollRetry")
+                        ->arrayNode("defaultConnectionExceptionRetry")
                             ->children()
                                 ->integerNode('initialDelay')
                                 ->isRequired()

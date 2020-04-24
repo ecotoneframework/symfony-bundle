@@ -30,10 +30,10 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public const WORKING_NAMESPACES_CONFIG = "ecotone.namespaces";
     public const FAIL_FAST_CONFIG = "ecotone.fail_fast";
     public const LOAD_SRC = "ecotone.load_src";
-    public const SERIALIZATION_DEFAULT_MEDIA_TYPE = "ecotone.serializationMediaType";
+    public const DEFAULT_SERIALIZATION_MEDIA_TYPE = "ecotone.serializationMediaType";
     public const ERROR_CHANNEL = "ecotone.errorChannel";
     public const DEFAULT_MEMORY_LIMIT = "ecotone.defaultMemoryLimit";
-    public const DEFAULT_CHANNEL_POLL_RETRY = "ecotone.defaultChannelPollRetry";
+    public const DEFAULT_CONNECTION_EXCEPTION_RETRY = "ecotone.defaultChannelPollRetry";
     const SRC_CATALOG = "src";
 
     /**
@@ -67,16 +67,16 @@ class EcotoneCompilerPass implements CompilerPassInterface
             ))
             ->withCacheDirectoryPath($ecotoneCacheDirectory);
 
-        if ($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE)) {
+        if ($container->getParameter(self::DEFAULT_SERIALIZATION_MEDIA_TYPE)) {
             $applicationConfiguration = $applicationConfiguration
-                                        ->withDefaultSerializationMediaType($container->getParameter(self::SERIALIZATION_DEFAULT_MEDIA_TYPE));
+                                        ->withDefaultSerializationMediaType($container->getParameter(self::DEFAULT_SERIALIZATION_MEDIA_TYPE));
         }
         if ($container->getParameter(self::DEFAULT_MEMORY_LIMIT)) {
             $applicationConfiguration = $applicationConfiguration
                 ->withConsumerMemoryLimit($container->getParameter(self::DEFAULT_MEMORY_LIMIT));
         }
-        if ($container->getParameter(self::DEFAULT_CHANNEL_POLL_RETRY)) {
-            $retryTemplate = $container->getParameter(self::DEFAULT_CHANNEL_POLL_RETRY);
+        if ($container->getParameter(self::DEFAULT_CONNECTION_EXCEPTION_RETRY)) {
+            $retryTemplate = $container->getParameter(self::DEFAULT_CONNECTION_EXCEPTION_RETRY);
             $applicationConfiguration = $applicationConfiguration
                 ->withConnectionRetryTemplate(RetryTemplateBuilder::exponentialBackoffWithMaxDelay(
                     $retryTemplate["initialDelay"],
