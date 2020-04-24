@@ -78,7 +78,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
         if ($container->getParameter(self::DEFAULT_CHANNEL_POLL_RETRY)) {
             $retryTemplate = $container->getParameter(self::DEFAULT_CHANNEL_POLL_RETRY);
             $applicationConfiguration = $applicationConfiguration
-                ->withChannelPollRetryTemplate(RetryTemplateBuilder::exponentialBackoffWithMaxDelay(
+                ->withConnectionRetryTemplate(RetryTemplateBuilder::exponentialBackoffWithMaxDelay(
                     $retryTemplate["initialDelay"],
                     $retryTemplate["maxAttempts"],
                     $retryTemplate["multiplier"]
