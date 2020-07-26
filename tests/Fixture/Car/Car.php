@@ -8,12 +8,6 @@ use Fixture\Car\IncreaseSpeedGateway;
 use Fixture\Car\GetSpeedGateway;
 use Fixture\Car\StopGateway;
 
-/**
- * Class Car
- * @package Fixture\Car
- * @author Dariusz Gafka <dgafka.mail@gmail.com>
- * @MessageEndpoint()
- */
 class Car
 {
     /**

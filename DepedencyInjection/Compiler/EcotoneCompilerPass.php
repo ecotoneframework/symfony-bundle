@@ -3,7 +3,8 @@
 namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use Ecotone\Messaging\Config\Annotation\FileSystemAnnotationRegistrationService;
+use Ecotone\AnnotationFinder\AnnotationFinder;
+use Ecotone\AnnotationFinder\FileSystem\FileSystemAnnotationFinder;
 use Ecotone\Messaging\Config\ApplicationConfiguration;
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
@@ -27,6 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class EcotoneCompilerPass implements CompilerPassInterface
 {
+    const         FRAMEWORK_NAMESPACE   = 'Ecotone';
     public const WORKING_NAMESPACES_CONFIG = "ecotone.namespaces";
     public const FAIL_FAST_CONFIG = "ecotone.fail_fast";
     public const LOAD_SRC = "ecotone.load_src";
@@ -63,7 +65,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
             ->withLoadCatalog($container->getParameter(self::LOAD_SRC) ? "src" : "")
             ->withNamespaces(array_merge(
                 $container->getParameter(self::WORKING_NAMESPACES_CONFIG),
-                [FileSystemAnnotationRegistrationService::FRAMEWORK_NAMESPACE]
+                [self::FRAMEWORK_NAMESPACE]
             ))
             ->withCacheDirectoryPath($ecotoneCacheDirectory);
 

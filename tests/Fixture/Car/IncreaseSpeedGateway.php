@@ -5,12 +5,6 @@ namespace Fixture\Car;
 use Ecotone\Messaging\Annotation\MessageEndpoint;
 use Ecotone\Messaging\Annotation\MessageGateway;
 
-/**
- * Interface IncreaseSpeedGateway
- * @package Fixture\Car
- * @author Dariusz Gafka <dgafka.mail@gmail.com>
- * @MessageEndpoint()
- */
 interface IncreaseSpeedGateway
 {
     const CHANNEL_NAME = 'speedChannel';
