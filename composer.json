@@ -1,6 +1,8 @@
 {
     "name": "ecotone/symfony-bundle",
     "type": "symfony-bundle",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +14,7 @@
     "description": "Extends Ecotone with Symfony integration",
     "require": {
         "php": "^7.4",
-        "ecotone/ecotone": "^0.11",
+        "ecotone/ecotone": "^0.12",
         "symfony/console": "^3.3|^4.0|^5.0",
         "symfony/framework-bundle": "^3.2|^4.0|^5.0"
     },
@@ -35,7 +37,12 @@
             "Ecotone\\SymfonyBundle\\": ""
         }
     },
-    "repositories": [],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../ecotone"
+        }
+    ],
     "autoload-dev": {
         "psr-4": {
             "Test\\": "tests/phpunit",
@@ -45,5 +52,10 @@
     },
     "replace": {},
     "scripts": {},
-    "conflict": {}
+    "conflict": {},
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.11.x-dev"
+        }
+    }
 }

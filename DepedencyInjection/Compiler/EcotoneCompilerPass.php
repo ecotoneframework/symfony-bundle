@@ -3,17 +3,15 @@
 namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use Ecotone\AnnotationFinder\AnnotationFinder;
-use Ecotone\AnnotationFinder\FileSystem\FileSystemAnnotationFinder;
 use Ecotone\Messaging\Config\ApplicationConfiguration;
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
-use Ecotone\Messaging\Handler\ErrorHandler\RetryTemplateBuilder;
-use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
+use Ecotone\Messaging\Gateway\MessagingEntrypoint;
+use Ecotone\Messaging\Handler\Recoverability\RetryTemplateBuilder;
 use Ecotone\Messaging\MessagingException;
 use Ecotone\Messaging\Support\InvalidArgumentException;
+use Ecotone\SymfonyBundle\DepedencyInjection\MessagingEntrypointCommand;
 use Ecotone\SymfonyBundle\EcotoneSymfonyBundle;
-use Psr\Container\ContainerInterface;
 use ReflectionException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
@@ -133,6 +131,18 @@ class EcotoneCompilerPass implements CompilerPassInterface
                     $alias->setPublic(true);
                 }
             }
+        }
+
+        foreach ($messagingConfiguration->getRegisteredOneTimeCommands() as $oneTimeCommandConfiguration) {
+            $definition = new Definition();
+            $definition->setClass(MessagingEntrypointCommand::class);
+            $definition->addArgument($oneTimeCommandConfiguration->getName());
+            $definition->addArgument($oneTimeCommandConfiguration->getChannelName());
+            $definition->addArgument($oneTimeCommandConfiguration->getParameters());
+            $definition->addArgument(new Reference(MessagingEntrypoint::class));
+            $definition->addTag("console.command", ["command" => $oneTimeCommandConfiguration->getName()]);
+
+            $container->setDefinition($oneTimeCommandConfiguration->getChannelName(), $definition);
         }
 
         $container->setParameter(EcotoneSymfonyBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, serialize($applicationConfiguration));
