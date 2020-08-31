@@ -69,7 +69,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
 
         if ($container->getParameter(self::DEFAULT_SERIALIZATION_MEDIA_TYPE)) {
             $applicationConfiguration = $applicationConfiguration
-                                        ->withDefaultSerializationMediaType($container->getParameter(self::DEFAULT_SERIALIZATION_MEDIA_TYPE));
+                ->withDefaultSerializationMediaType($container->getParameter(self::DEFAULT_SERIALIZATION_MEDIA_TYPE));
         }
         if ($container->getParameter(self::DEFAULT_MEMORY_LIMIT)) {
             $applicationConfiguration = $applicationConfiguration
@@ -86,7 +86,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
         }
         if ($container->getParameter(self::ERROR_CHANNEL)) {
             $applicationConfiguration = $applicationConfiguration
-                                        ->withDefaultErrorChannel($container->getParameter(self::ERROR_CHANNEL));
+                ->withDefaultErrorChannel($container->getParameter(self::ERROR_CHANNEL));
         }
 
         $messagingConfiguration = MessagingSystemConfiguration::prepare(
@@ -138,7 +138,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $definition->setClass(MessagingEntrypointCommand::class);
             $definition->addArgument($oneTimeCommandConfiguration->getName());
             $definition->addArgument($oneTimeCommandConfiguration->getChannelName());
-            $definition->addArgument($oneTimeCommandConfiguration->getParameters());
+            $definition->addArgument(serialize($oneTimeCommandConfiguration->getParameters()));
             $definition->addArgument(new Reference(MessagingEntrypoint::class));
             $definition->addTag("console.command", ["command" => $oneTimeCommandConfiguration->getName()]);
 

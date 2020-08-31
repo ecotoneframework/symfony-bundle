@@ -24,12 +24,12 @@ class MessagingEntrypointCommand extends Command
     /**
      * @var OneTimeCommandParameter[] $parameters
      */
-    public function __construct(string $name, string $requestChannel, array $parameters, MessagingEntrypoint $messagingEntrypoint)
+    public function __construct(string $name, string $requestChannel, string $parameters, MessagingEntrypoint $messagingEntrypoint)
     {
         $this->name = $name;
         $this->messagingEntrypoint = $messagingEntrypoint;
         $this->requestChannel = $requestChannel;
-        $this->parameters = $parameters;
+        $this->parameters = unserialize($parameters);
 
         parent::__construct();
     }
