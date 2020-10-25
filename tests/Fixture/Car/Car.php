@@ -15,33 +15,19 @@ class Car
      */
     private $speed = 0;
 
-    /**
-     * @param int $amount
-     * @ServiceActivator(
-     *     inputChannelName=IncreaseSpeedGateway::CHANNEL_NAME
-     * )
-     */
+    #[ServiceActivator(IncreaseSpeedGateway::CHANNEL_NAME)]
     public function increaseSpeed(int $amount) : void
     {
         $this->speed += $amount;
     }
 
-    /**
-     * @ServiceActivator(
-     *     inputChannelName=StopGateway::CHANNEL_NAME
-     * )
-     */
+    #[ServiceActivator(StopGateway::CHANNEL_NAME)]
     public function stop() : void
     {
         $this->speed = 0;
     }
 
-    /**
-     * @return int
-     * @ServiceActivator(
-     *     inputChannelName=GetSpeedGateway::CHANNEL_NAME
-     * )
-     */
+    #[ServiceActivator(GetSpeedGateway::CHANNEL_NAME)]
     public function getCurrentSpeed() : int
     {
         return $this->speed;
