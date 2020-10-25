@@ -9,11 +9,6 @@ interface GetSpeedGateway
 {
     const CHANNEL_NAME = 'getSpeedChannel';
 
-    /**
-     * @return int
-     * @MessageGateway(
-     *     requestChannel=GetSpeedGateway::CHANNEL_NAME
-     * )
-     */
+    #[MessageGateway(GetSpeedGateway::CHANNEL_NAME)]
     public function getSpeed() : int;
 }

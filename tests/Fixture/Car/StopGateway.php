@@ -9,10 +9,6 @@ interface StopGateway
 {
     const CHANNEL_NAME = 'stopChannel';
 
-    /**
-     * @MessageGateway(
-     *     requestChannel=StopGateway::CHANNEL_NAME
-     * )
-     */
+    #[MessageGateway(StopGateway::CHANNEL_NAME)]
     public function stop() : void;
 }

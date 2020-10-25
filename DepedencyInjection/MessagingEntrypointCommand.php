@@ -4,7 +4,7 @@
 namespace Ecotone\SymfonyBundle\DepedencyInjection;
 
 
-use Ecotone\Messaging\Config\Annotation\ModuleConfiguration\OneTimeCommandModule;
+use Ecotone\Messaging\Config\Annotation\ModuleConfiguration\ConsoleCommandModule;
 use Ecotone\Messaging\Config\OneTimeCommandParameter;
 use Ecotone\Messaging\Config\OneTimeCommandResultSet;
 use Ecotone\Messaging\Gateway\MessagingEntrypoint;
@@ -52,7 +52,7 @@ class MessagingEntrypointCommand extends Command
     {
         $arguments = [];
         foreach ($input->getArguments() as $argumentName => $value) {
-            $arguments[OneTimeCommandModule::ECOTONE_COMMAND_PARAMETER_PREFIX . $argumentName] = $value;
+            $arguments[ConsoleCommandModule::ECOTONE_COMMAND_PARAMETER_PREFIX . $argumentName] = $value;
         }
 
         /** @var OneTimeCommandResultSet $result */

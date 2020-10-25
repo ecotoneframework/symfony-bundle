@@ -133,7 +133,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
             }
         }
 
-        foreach ($messagingConfiguration->getRegisteredOneTimeCommands() as $oneTimeCommandConfiguration) {
+        foreach ($messagingConfiguration->getRegisteredConsoleCommands() as $oneTimeCommandConfiguration) {
             $definition = new Definition();
             $definition->setClass(MessagingEntrypointCommand::class);
             $definition->addArgument($oneTimeCommandConfiguration->getName());
