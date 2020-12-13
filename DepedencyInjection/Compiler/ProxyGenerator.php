@@ -18,17 +18,6 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class ProxyGenerator
 {
-    /**
-     * @param string $referenceName
-     * @param Container $container
-     * @param string $interface
-     * @param Configuration $configuration
-     *
-     * @param string $cacheDirectoryPath
-     * @param bool $isLazyLoaded
-     * @return object
-     * @throws \Ecotone\Messaging\MessagingException
-     */
     public static function createFor(string $referenceName, Container $container, string $interface, string $cacheDirectoryPath, bool $isLazyLoaded)
     {
         $proxyFactory = ProxyFactory::createWithCache($cacheDirectoryPath);
@@ -62,7 +51,7 @@ class ProxyGenerator
             public function call(string $wrappedClass, string $method, array $params = [])
             {
                 /** @var MessagingSystem $messagingSystem */
-                $messagingSystem = $this->container->get(EcotoneSymfonyBundle::MESSAGING_SYSTEM_SERVICE_NAME);
+                $messagingSystem = $this->container->get(EcotoneSymfonyBundle::CONFIGURED_MESSAGING_SYSTEM);
 
                 $nonProxyCombinedGateway = $messagingSystem->getNonProxyGatewayByName($this->referenceName);
 

@@ -3,7 +3,7 @@
 namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use Ecotone\Messaging\Config\ApplicationConfiguration;
+use Ecotone\Messaging\Config\ServiceConfiguration;
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Gateway\MessagingEntrypoint;
@@ -57,7 +57,7 @@ class EcotoneCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $ecotoneCacheDirectory       = $container->getParameter("kernel.cache_dir") . DIRECTORY_SEPARATOR . "ecotone";
-        $applicationConfiguration = ApplicationConfiguration::createWithDefaults()
+        $applicationConfiguration = ServiceConfiguration::createWithDefaults()
             ->withEnvironment($container->getParameter("kernel.environment"))
             ->withFailFast($container->getParameter("kernel.environment") === "prod" ? false : $container->getParameter(self::FAIL_FAST_CONFIG))
             ->withLoadCatalog($container->getParameter(self::LOAD_SRC) ? "src" : "")
@@ -145,6 +145,6 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $container->setDefinition($oneTimeCommandConfiguration->getChannelName(), $definition);
         }
 
-        $container->setParameter(EcotoneSymfonyBundle::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME, serialize($applicationConfiguration));
+        $container->setParameter(EcotoneSymfonyBundle::APPLICATION_CONFIGURATION_CONTEXT, serialize($applicationConfiguration));
     }
 }

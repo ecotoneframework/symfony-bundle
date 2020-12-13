@@ -9,6 +9,7 @@ use Ecotone\Messaging\Handler\ExpressionEvaluationService;
 use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
 use Ecotone\SymfonyBundle\Command\ListAllAsynchronousEndpointsCommand;
 use Ecotone\SymfonyBundle\Command\RunAsynchronousEndpointCommand;
+use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\ConfiguredMessagingSystemWrapper;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\EcotoneCompilerPass;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\SymfonyReferenceTypeResolver;
 use Ecotone\SymfonyBundle\DepedencyInjection\EcotoneExtension;
@@ -25,8 +26,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class EcotoneSymfonyBundle extends Bundle
 {
-    const MESSAGING_SYSTEM_SERVICE_NAME = "messaging_system";
-    const MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME = "messaging_system_configuration";
+    const CONFIGURED_MESSAGING_SYSTEM                 = "configured_messaging_system";
+    const CONFIGURED_MESSAGING_SYSTEM_WRAPPER = ConfiguredMessagingSystem::class;
+    const APPLICATION_CONFIGURATION_CONTEXT   = "messaging_system_application_context";
 
     public function build(ContainerBuilder $container)
     {
@@ -35,22 +37,15 @@ class EcotoneSymfonyBundle extends Bundle
         $this->setUpExpressionLanguage($container);
 
         $definition = new Definition();
+        $definition->setClass(ConfiguredMessagingSystemWrapper::class);
+        $definition->addArgument(new Reference('service_container'));
+        $container->setDefinition(self::CONFIGURED_MESSAGING_SYSTEM_WRAPPER, $definition);
+
+        $definition = new Definition();
         $definition->setClass(ConfiguredMessagingSystem::class);
         $definition->setSynthetic(true);
         $definition->setPublic(true);
-        $container->setDefinition(self::MESSAGING_SYSTEM_SERVICE_NAME, $definition);
-
-        $definition = new Definition();
-        $definition->setClass(ListAllAsynchronousEndpointsCommand::class);
-        $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
-        $definition->addTag('console.command');
-        $container->setDefinition(ListAllAsynchronousEndpointsCommand::class, $definition);
-
-        $definition = new Definition();
-        $definition->setClass(RunAsynchronousEndpointCommand::class);
-        $definition->addArgument(new Reference(self::MESSAGING_SYSTEM_SERVICE_NAME));
-        $definition->addTag('console.command');
-        $container->setDefinition(RunAsynchronousEndpointCommand::class, $definition);
+        $container->setDefinition(self::CONFIGURED_MESSAGING_SYSTEM, $definition);
     }
 
     /**
@@ -70,7 +65,6 @@ class EcotoneSymfonyBundle extends Bundle
         $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'createWithExternalExpressionLanguage']);
         $definition->addArgument(new Reference($expressionLanguageAdapter));
         $definition->setPublic(true);
-
         $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
 
@@ -79,11 +73,11 @@ class EcotoneSymfonyBundle extends Bundle
         $configuration = MessagingSystemConfiguration::prepare(
             EcotoneCompilerPass::getRootProjectPath($this->container),
             new SymfonyReferenceTypeResolver($this->container),
-            unserialize($this->container->getParameter(self::MESSAGING_SYSTEM_CONFIGURATION_SERVICE_NAME))
+            unserialize($this->container->getParameter(self::APPLICATION_CONFIGURATION_CONTEXT))
         );
         $messagingSystem = $configuration->buildMessagingSystemFromConfiguration($this->container->get('symfonyReferenceSearchService'));
 
-        $this->container->set(self::MESSAGING_SYSTEM_SERVICE_NAME, $messagingSystem);
+        $this->container->set(self::CONFIGURED_MESSAGING_SYSTEM, $messagingSystem);
     }
 
     public function getContainerExtension()

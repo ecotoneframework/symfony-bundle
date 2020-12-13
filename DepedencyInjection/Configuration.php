@@ -13,102 +13,53 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('ecotone');
 
-//        symfony 3
-        if (method_exists($treeBuilder, "root")) {
-            $treeBuilder
-                ->root("ecotone")
-                    ->children()
-                        ->booleanNode("failFast")
-                        ->defaultTrue()
-                        ->end()
 
-                        ->booleanNode("loadSrcNamespaces")
-                        ->defaultTrue()
-                        ->end()
-
-                        ->scalarNode("defaultSerializationMediaType")
-                        ->defaultNull()
-                        ->end()
-
-                        ->scalarNode("defaultErrorChannel")
-                        ->defaultNull()
-                        ->end()
-
-                        ->arrayNode("namespaces")
-                            ->scalarPrototype()
-                            ->end()
-                        ->end()
-
-                        ->integerNode("defaultMemoryLimit")
-                        ->defaultNull()
-                        ->end()
-
-                        ->arrayNode("defaultConnectionExceptionRetry")
-                            ->children()
-                                ->integerNode('initialDelay')
-                                ->isRequired()
-                                ->end()
-                                ->integerNode('maxAttempts')
-                                ->isRequired()
-                                ->end()
-                                ->integerNode('multiplier')
-                                ->isRequired()
-                                ->end()
-                            ->end()
-                        ->end()
-
+        return $treeBuilder
+            ->getRootNode()
+                ->children()
+                    ->booleanNode("failFast")
+                    ->defaultTrue()
                     ->end()
-                ->end();
-        } else {
-            $treeBuilder
-                ->getRootNode()
-                    ->children()
-                        ->booleanNode("failFast")
-                        ->defaultTrue()
-                        ->end()
 
-                        ->booleanNode("loadSrcNamespaces")
-                        ->defaultTrue()
-                        ->end()
-
-                        ->scalarNode("defaultSerializationMediaType")
-                        ->defaultNull()
-                        ->end()
-
-                        ->scalarNode("defaultErrorChannel")
-                        ->defaultNull()
-                        ->end()
-
-
-                        ->arrayNode("namespaces")
-                            ->scalarPrototype()
-                            ->end()
-                        ->end()
-
-                        ->integerNode("defaultMemoryLimit")
-                        ->defaultNull()
-                        ->end()
-
-                        ->arrayNode("defaultConnectionExceptionRetry")
-                            ->children()
-                                ->integerNode('initialDelay')
-                                ->isRequired()
-                                ->end()
-
-                                ->integerNode('maxAttempts')
-                                ->isRequired()
-                                ->end()
-
-                                ->integerNode('multiplier')
-                                ->isRequired()
-                                ->end()
-                                ->end()
-                        ->end()
-
+                    ->booleanNode("loadSrcNamespaces")
+                    ->defaultTrue()
                     ->end()
-                ->end();
-        }
 
-        return $treeBuilder;
+                    ->scalarNode("defaultSerializationMediaType")
+                    ->defaultNull()
+                    ->end()
+
+                    ->scalarNode("defaultErrorChannel")
+                    ->defaultNull()
+                    ->end()
+
+
+                    ->arrayNode("namespaces")
+                        ->scalarPrototype()
+                        ->end()
+                    ->end()
+
+                    ->integerNode("defaultMemoryLimit")
+                    ->defaultNull()
+                    ->end()
+
+                    ->arrayNode("defaultConnectionExceptionRetry")
+                        ->children()
+                            ->integerNode('initialDelay')
+                            ->isRequired()
+                            ->end()
+
+                            ->integerNode('maxAttempts')
+                            ->isRequired()
+                            ->end()
+
+                            ->integerNode('multiplier')
+                            ->isRequired()
+                            ->end()
+                            ->end()
+                    ->end()
+
+                ->end()
+            ->end();
     }
 }

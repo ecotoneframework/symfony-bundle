@@ -5,8 +5,8 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection;
 
 
 use Ecotone\Messaging\Config\Annotation\ModuleConfiguration\ConsoleCommandModule;
-use Ecotone\Messaging\Config\OneTimeCommandParameter;
-use Ecotone\Messaging\Config\OneTimeCommandResultSet;
+use Ecotone\Messaging\Config\ConsoleCommandParameter;
+use Ecotone\Messaging\Config\ConsoleCommandResultSet;
 use Ecotone\Messaging\Gateway\MessagingEntrypoint;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -22,7 +22,7 @@ class MessagingEntrypointCommand extends Command
     private array $parameters;
 
     /**
-     * @var OneTimeCommandParameter[] $parameters
+     * @var ConsoleCommandParameter[] $parameters
      */
     public function __construct(string $name, string $requestChannel, string $parameters, MessagingEntrypoint $messagingEntrypoint)
     {
@@ -55,7 +55,7 @@ class MessagingEntrypointCommand extends Command
             $arguments[ConsoleCommandModule::ECOTONE_COMMAND_PARAMETER_PREFIX . $argumentName] = $value;
         }
 
-        /** @var OneTimeCommandResultSet $result */
+        /** @var ConsoleCommandResultSet $result */
         $result = $this->messagingEntrypoint->sendWithHeaders([], $arguments, $this->requestChannel);
 
         if ($result) {
