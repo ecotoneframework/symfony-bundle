@@ -10,19 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SymfonyReferenceSearchService implements ReferenceSearchService
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     *  constructor.
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(private ContainerInterface $container){}
 
     public function get(string $reference) : object
     {

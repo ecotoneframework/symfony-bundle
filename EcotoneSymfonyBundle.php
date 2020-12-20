@@ -11,6 +11,7 @@ use Ecotone\SymfonyBundle\Command\ListAllAsynchronousEndpointsCommand;
 use Ecotone\SymfonyBundle\Command\RunAsynchronousEndpointCommand;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\ConfiguredMessagingSystemWrapper;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\EcotoneCompilerPass;
+use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\SymfonyConfigurationVariableService;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\SymfonyReferenceTypeResolver;
 use Ecotone\SymfonyBundle\DepedencyInjection\EcotoneExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -73,6 +74,7 @@ class EcotoneSymfonyBundle extends Bundle
         $configuration = MessagingSystemConfiguration::prepare(
             EcotoneCompilerPass::getRootProjectPath($this->container),
             new SymfonyReferenceTypeResolver($this->container),
+            new SymfonyConfigurationVariableService($this->container),
             unserialize($this->container->getParameter(self::APPLICATION_CONFIGURATION_CONTEXT))
         );
         $messagingSystem = $configuration->buildMessagingSystemFromConfiguration($this->container->get('symfonyReferenceSearchService'));

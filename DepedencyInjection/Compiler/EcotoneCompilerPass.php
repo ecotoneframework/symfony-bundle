@@ -6,6 +6,7 @@ use Doctrine\Common\Annotations\AnnotationException;
 use Ecotone\Messaging\Config\ServiceConfiguration;
 use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
+use Ecotone\Messaging\ConfigurationVariableService;
 use Ecotone\Messaging\Gateway\MessagingEntrypoint;
 use Ecotone\Messaging\Handler\Recoverability\RetryTemplateBuilder;
 use Ecotone\Messaging\MessagingException;
@@ -89,11 +90,20 @@ class EcotoneCompilerPass implements CompilerPassInterface
                 ->withDefaultErrorChannel($container->getParameter(self::ERROR_CHANNEL));
         }
 
-        $messagingConfiguration = MessagingSystemConfiguration::prepare(
+        $configurationVariableService = new SymfonyConfigurationVariableService($container);
+        $messagingConfiguration       = MessagingSystemConfiguration::prepare(
             self::getRootProjectPath($container),
             new SymfonyReferenceTypeResolver($container),
+            $configurationVariableService,
             $applicationConfiguration
         );
+
+        $definition = new Definition();
+        $definition->setClass(SymfonyConfigurationVariableService::class);
+        $definition->setPublic(true);
+        $definition->addArgument(new Reference('service_container'));
+        $container->setDefinition(ConfigurationVariableService::REFERENCE_NAME, $definition);
+
 
         $definition = new Definition();
         $definition->setClass(SymfonyReferenceSearchService::class);
