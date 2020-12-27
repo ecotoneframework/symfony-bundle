@@ -11,7 +11,6 @@ class CacheCleaner implements CacheClearerInterface
 {
     public function clear(string $cacheDir)
     {
-        die("test");
         MessagingSystemConfiguration::cleanCache($cacheDir . EcotoneCompilerPass::CACHE_DIRECTORY_SUFFIX);
     }
 }
