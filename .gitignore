@@ -11,3 +11,4 @@
 ###< phpunit/phpunit ###
 .idea
 composer.lock
+.phpunit.result.cache
