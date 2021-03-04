@@ -34,8 +34,9 @@
 
     "autoload": {
         "psr-4": {
-            "Ecotone\\SymfonyBundle\\": ""
-        }
+            "Ecotone\\SymfonyBundle\\DepedencyInjection\\": "DepedencyInjection"
+        },
+        "classmap": ["EcotoneSymfonyBundle.php"]
     },
     "autoload-dev": {
         "psr-4": {
