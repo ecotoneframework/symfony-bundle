@@ -1,6 +1,7 @@
 {
     "name": "ecotone/symfony-bundle",
     "type": "symfony-bundle",
+    "homepage": "https://docs.ecotone.tech/",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "license": "MIT",
@@ -13,16 +14,15 @@
     "keywords": ["symfony","ecotone","ddd","messaging","message", "enterprise integration patterns", "eip", "distributed architecture"],
     "description": "Extends Ecotone with Symfony integration",
     "require": {
-        "php": "^7.4",
-        "ecotone/ecotone": "^0.12",
-        "symfony/console": "^3.3|^4.0|^5.0",
-        "symfony/framework-bundle": "^3.2|^4.0|^5.0"
+        "php": ">=8.0",
+        "ecotone/ecotone": "^1.0",
+        "symfony/console": ">=4.0",
+        "symfony/framework-bundle": ">=4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.2.3",
+        "phpunit/phpunit": "^9.2",
         "behat/behat": "^3.3.1",
-        "behat/symfony2-extension": "^2.1",
-        "phan/phan": "^1.2",
+        "friends-of-behat/symfony-extension": "^2.1",
         "phpstan/phpstan": "^0.12"
     },
     "config": {
@@ -37,25 +37,18 @@
             "Ecotone\\SymfonyBundle\\": ""
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../ecotone"
-        }
-    ],
     "autoload-dev": {
         "psr-4": {
             "Test\\": "tests/phpunit",
             "Behat\\Bootstrap\\": "tests/Behat/Bootstrap",
-            "Fixture\\": "tests/Fixture"
+            "Fixture\\": "tests/Fixture",
+            "Ecotone\\SymfonyBundle\\App\\": "App"
         }
     },
     "replace": {},
     "scripts": {},
     "conflict": {},
     "extra": {
-        "branch-alias": {
-            "dev-master": "0.11.x-dev"
-        }
+        "branch-version": "1.x"
     }
 }
