@@ -49,6 +49,8 @@
     "scripts": {},
     "conflict": {},
     "extra": {
-        "branch-version": "1.x"
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
