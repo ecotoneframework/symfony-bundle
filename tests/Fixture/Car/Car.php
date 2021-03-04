@@ -2,8 +2,8 @@
 
 namespace Fixture\Car;
 
-use Ecotone\Messaging\Annotation\MessageEndpoint;
-use Ecotone\Messaging\Annotation\ServiceActivator;
+use Ecotone\Messaging\Attribute\MessageEndpoint;
+use Ecotone\Messaging\Attribute\ServiceActivator;
 use Fixture\Car\IncreaseSpeedGateway;
 use Fixture\Car\GetSpeedGateway;
 use Fixture\Car\StopGateway;

@@ -7,6 +7,7 @@ use Ecotone\Messaging\Config\ConfigurationException;
 use Ecotone\Messaging\Config\MessagingSystemConfiguration;
 use Ecotone\Messaging\Config\ServiceConfiguration;
 use Ecotone\Messaging\ConfigurationVariableService;
+use Ecotone\Messaging\Gateway\ConsoleCommandRunner;
 use Ecotone\Messaging\Gateway\MessagingEntrypoint;
 use Ecotone\Messaging\Handler\Recoverability\RetryTemplateBuilder;
 use Ecotone\Messaging\MessagingException;
@@ -20,11 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * Class IntegrationMessagingCompilerPass
- * @package Ecotone\SymfonyBundle
- * @author  Dariusz Gafka <dgafka.mail@gmail.com>
- */
 class EcotoneCompilerPass implements CompilerPassInterface
 {
     const         FRAMEWORK_NAMESPACE                = 'Ecotone';
@@ -149,9 +145,8 @@ class EcotoneCompilerPass implements CompilerPassInterface
             $definition = new Definition();
             $definition->setClass(MessagingEntrypointCommand::class);
             $definition->addArgument($oneTimeCommandConfiguration->getName());
-            $definition->addArgument($oneTimeCommandConfiguration->getChannelName());
             $definition->addArgument(serialize($oneTimeCommandConfiguration->getParameters()));
-            $definition->addArgument(new Reference(MessagingEntrypoint::class));
+            $definition->addArgument(new Reference(ConsoleCommandRunner::class));
             $definition->addTag("console.command", ["command" => $oneTimeCommandConfiguration->getName()]);
 
             $container->setDefinition($oneTimeCommandConfiguration->getChannelName(), $definition);

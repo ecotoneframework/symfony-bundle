@@ -2,8 +2,8 @@
 
 namespace Fixture\Car;
 
-use Ecotone\Messaging\Annotation\MessageEndpoint;
-use Ecotone\Messaging\Annotation\MessageGateway;
+use Ecotone\Messaging\Attribute\MessageEndpoint;
+use Ecotone\Messaging\Attribute\MessageGateway;
 
 interface GetSpeedGateway
 {

@@ -7,6 +7,7 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection;
 use Ecotone\Messaging\Config\Annotation\ModuleConfiguration\ConsoleCommandModule;
 use Ecotone\Messaging\Config\ConsoleCommandParameter;
 use Ecotone\Messaging\Config\ConsoleCommandResultSet;
+use Ecotone\Messaging\Gateway\ConsoleCommandRunner;
 use Ecotone\Messaging\Gateway\MessagingEntrypoint;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -16,20 +17,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class MessagingEntrypointCommand extends Command
 {
-    private MessagingEntrypoint $messagingEntrypoint;
-    private string $requestChannel;
     private string $name;
     private array $parameters;
+    private ConsoleCommandRunner $consoleCommandRunner;
 
     /**
      * @var ConsoleCommandParameter[] $parameters
      */
-    public function __construct(string $name, string $requestChannel, string $parameters, MessagingEntrypoint $messagingEntrypoint)
+    public function __construct(string $name, string $parameters, ConsoleCommandRunner $consoleCommandRunner)
     {
         $this->name = $name;
-        $this->messagingEntrypoint = $messagingEntrypoint;
-        $this->requestChannel = $requestChannel;
         $this->parameters = unserialize($parameters);
+        $this->consoleCommandRunner = $consoleCommandRunner;
 
         parent::__construct();
     }
@@ -50,13 +49,8 @@ class MessagingEntrypointCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $arguments = [];
-        foreach ($input->getArguments() as $argumentName => $value) {
-            $arguments[ConsoleCommandModule::ECOTONE_COMMAND_PARAMETER_PREFIX . $argumentName] = $value;
-        }
-
         /** @var ConsoleCommandResultSet $result */
-        $result = $this->messagingEntrypoint->sendWithHeaders([], $arguments, $this->requestChannel);
+        $result = $this->consoleCommandRunner->execute($this->name, $input->getArguments());
 
         if ($result) {
             $table = new Table($output);

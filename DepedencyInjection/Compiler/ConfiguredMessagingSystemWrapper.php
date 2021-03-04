@@ -46,6 +46,11 @@ class ConfiguredMessagingSystemWrapper implements ConfiguredMessagingSystem
         return $this->getConfiguredSystem()->getListOfAsynchronouslyRunningConsumers();
     }
 
+    public function runConsoleCommand(string $commandName, array $parameters): mixed
+    {
+        return $this->getConfiguredSystem()->runConsoleCommand($commandName, $parameters);
+    }
+
     private function getConfiguredSystem(): ConfiguredMessagingSystem
     {
         return $this->container->get(EcotoneSymfonyBundle::CONFIGURED_MESSAGING_SYSTEM);
