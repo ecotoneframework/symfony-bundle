@@ -40,3 +40,4 @@ ecotone:
         multiplier: 2
     defaultErrorChannel: "errorChannel"
     defaultSerializationMediaType: "application/json"
+    loadSrcNamespaces: false
