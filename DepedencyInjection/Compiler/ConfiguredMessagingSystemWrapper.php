@@ -36,14 +36,14 @@ class ConfiguredMessagingSystemWrapper implements ConfiguredMessagingSystem
         return $this->getConfiguredSystem()->getMessageChannelByName($channelName);
     }
 
-    public function runAsynchronouslyRunningEndpoint(string $endpointId): void
+    public function run(string $endpointId): void
     {
-        $this->getConfiguredSystem()->runAsynchronouslyRunningEndpoint($endpointId);
+        $this->getConfiguredSystem()->run($endpointId);
     }
 
-    public function getListOfAsynchronouslyRunningConsumers(): array
+    public function list(): array
     {
-        return $this->getConfiguredSystem()->getListOfAsynchronouslyRunningConsumers();
+        return $this->getConfiguredSystem()->list();
     }
 
     public function runConsoleCommand(string $commandName, array $parameters): mixed
