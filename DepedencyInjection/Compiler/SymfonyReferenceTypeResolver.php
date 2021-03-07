@@ -42,7 +42,7 @@ class SymfonyReferenceTypeResolver implements ReferenceTypeFromNameResolver
         if ($this->container instanceof ContainerBuilder) {
             return TypeDescriptor::create($this->container->getDefinition($referenceName)->getClass());
         } else {
-            return TypeDescriptor::create(get_class($this->container->get($referenceName)));
+            return TypeDescriptor::create(get_class($this->container->get($referenceName . SymfonyReferenceSearchService::REFERENCE_SUFFIX)));
         }
     }
 }

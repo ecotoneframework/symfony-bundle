@@ -10,15 +10,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SymfonyReferenceSearchService implements ReferenceSearchService
 {
+    const REFERENCE_SUFFIX = '-proxy';
+
     public function __construct(private ContainerInterface $container){}
 
     public function get(string $reference) : object
     {
-        return $this->container->get($reference . '-proxy');
+        return $this->container->get($reference . self::REFERENCE_SUFFIX);
     }
 
     public function has(string $referenceName): bool
     {
-        return $this->container->has($referenceName . '-proxy');
+        return $this->container->has($referenceName . self::REFERENCE_SUFFIX);
     }
 }
