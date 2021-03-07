@@ -75,7 +75,8 @@ class EcotoneSymfonyBundle extends Bundle
             EcotoneCompilerPass::getRootProjectPath($this->container),
             new SymfonyReferenceTypeResolver($this->container),
             new SymfonyConfigurationVariableService($this->container),
-            unserialize($this->container->getParameter(self::APPLICATION_CONFIGURATION_CONTEXT))
+            unserialize($this->container->getParameter(self::APPLICATION_CONFIGURATION_CONTEXT)),
+            true
         );
         $messagingSystem = $configuration->buildMessagingSystemFromConfiguration($this->container->get('symfonyReferenceSearchService'));
 

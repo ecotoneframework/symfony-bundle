@@ -88,7 +88,8 @@ class EcotoneCompilerPass implements CompilerPassInterface
             self::getRootProjectPath($container),
             new SymfonyReferenceTypeResolver($container),
             $configurationVariableService,
-            $applicationConfiguration
+            $applicationConfiguration,
+            false
         );
 
         $definition = new Definition();
