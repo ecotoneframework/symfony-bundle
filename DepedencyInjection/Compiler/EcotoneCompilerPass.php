@@ -24,6 +24,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class EcotoneCompilerPass implements CompilerPassInterface
 {
     const         FRAMEWORK_NAMESPACE                = 'Ecotone';
+    public const  SERVICE_NAME                           = "ecotone.service_name";
     public const  WORKING_NAMESPACES_CONFIG          = "ecotone.namespaces";
     public const  FAIL_FAST_CONFIG                   = "ecotone.fail_fast";
     public const  LOAD_SRC                           = "ecotone.load_src";
@@ -58,6 +59,11 @@ class EcotoneCompilerPass implements CompilerPassInterface
                 )
             )
             ->withCacheDirectoryPath($ecotoneCacheDirectory);
+
+        if ($container->getParameter(self::SERVICE_NAME)) {
+            $applicationConfiguration = $applicationConfiguration
+                ->withServiceName($container->getParameter(self::SERVICE_NAME));
+        }
 
         if ($container->getParameter(self::DEFAULT_SERIALIZATION_MEDIA_TYPE)) {
             $applicationConfiguration = $applicationConfiguration

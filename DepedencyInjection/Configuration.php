@@ -17,6 +17,10 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder
             ->getRootNode()
                 ->children()
+                    ->scalarNode("serviceName")
+                        ->defaultNull()
+                    ->end()
+
                     ->booleanNode("failFast")
                     ->defaultTrue()
                     ->end()
