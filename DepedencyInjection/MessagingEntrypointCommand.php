@@ -13,11 +13,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MessagingEntrypointCommand extends Command
 {
     private string $name;
+    /** @var ConsoleCommandParameter[] */
     private array $parameters;
     private ConsoleCommandRunner $consoleCommandRunner;
 
@@ -36,10 +38,14 @@ class MessagingEntrypointCommand extends Command
     protected function configure()
     {
         foreach ($this->parameters as $parameter) {
-            if ($parameter->hasDefaultValue()) {
-                $this->addArgument($parameter->getName(), InputArgument::OPTIONAL, "", $parameter->getDefaultValue());
+            if ($parameter->isOption()) {
+                $this->addOption($parameter->getName(), null, InputOption::VALUE_OPTIONAL, "", $parameter->getDefaultValue());
             }else {
-                $this->addArgument($parameter->getName(), InputArgument::REQUIRED);
+                if ($parameter->hasDefaultValue()) {
+                    $this->addArgument($parameter->getName(), InputArgument::OPTIONAL, "", $parameter->getDefaultValue());
+                }else {
+                    $this->addArgument($parameter->getName(), InputArgument::REQUIRED);
+                }
             }
         }
 
