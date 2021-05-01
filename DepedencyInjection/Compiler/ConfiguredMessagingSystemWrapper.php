@@ -3,6 +3,7 @@
 namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
+use Ecotone\Messaging\Endpoint\ExecutionPollingMetadata;
 use Ecotone\Messaging\MessageChannel;
 use Ecotone\SymfonyBundle\EcotoneSymfonyBundle;
 use Symfony\Component\DependencyInjection\Container;
@@ -36,9 +37,9 @@ class ConfiguredMessagingSystemWrapper implements ConfiguredMessagingSystem
         return $this->getConfiguredSystem()->getMessageChannelByName($channelName);
     }
 
-    public function run(string $endpointId): void
+    public function run(string $endpointId, ?ExecutionPollingMetadata $executionPollingMetadata = null): void
     {
-        $this->getConfiguredSystem()->run($endpointId);
+        $this->getConfiguredSystem()->run($endpointId, $executionPollingMetadata);
     }
 
     public function list(): array
