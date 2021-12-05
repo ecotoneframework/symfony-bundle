@@ -1,7 +1,9 @@
 ## Integration Messaging Symfony
 
-[![Build Status](https://travis-ci.org/ecotoneframework/symfony.svg?branch=master)](https://travis-ci.org/ecotoneframework/symfony)
-[![License](https://poser.pugx.org/ecotone/symfony/license)](https://packagist.org/packages/ecotone/symfony)
-[![Latest Stable Version](https://poser.pugx.org/ecotone/symfony/v/stable)](https://packagist.org/packages/ecotone/symfony)
+![Github Actions](https://github.com/ecotoneFramework/symfony/actions/workflows/php.yml/badge.svg)
+[![Latest Stable Version](https://poser.pugx.org/ecotone/ecotone/v/stable)](https://packagist.org/packages/ecotone/ecotone)
+[![License](http://poser.pugx.org/ecotone/ecotone/license)](https://packagist.org/packages/ecotone/ecotone)
+[![Total Downloads](http://poser.pugx.org/ecotone/ecotone/downloads)](https://packagist.org/packages/ecotone/ecotone)
+[![PHP Version Require](http://poser.pugx.org/ecotone/ecotone/require/php)](https://packagist.org/packages/ecotone/ecotone)
 
 Provides integration for Symfony with [Ecotone](https://github.com/ecotoneframework/ecotone).
