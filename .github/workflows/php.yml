@@ -33,5 +33,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Test Behat
+      run: vendor/bin/behat
+
     - name: Test PHPStan
       run: vendor/bin/phpstan analyse
