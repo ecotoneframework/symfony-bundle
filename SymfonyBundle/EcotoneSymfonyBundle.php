@@ -16,6 +16,7 @@ use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\SymfonyReferenceTypeResolv
 use Ecotone\SymfonyBundle\DepedencyInjection\EcotoneExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -83,7 +84,7 @@ class EcotoneSymfonyBundle extends Bundle
         $this->container->set(self::CONFIGURED_MESSAGING_SYSTEM, $messagingSystem);
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new EcotoneExtension();
     }
