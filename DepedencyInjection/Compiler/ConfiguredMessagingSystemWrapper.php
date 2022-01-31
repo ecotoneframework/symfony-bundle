@@ -5,6 +5,10 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Ecotone\Messaging\Endpoint\ExecutionPollingMetadata;
 use Ecotone\Messaging\MessageChannel;
+use Ecotone\Modelling\CommandBus;
+use Ecotone\Modelling\DistributedBus;
+use Ecotone\Modelling\EventBus;
+use Ecotone\Modelling\QueryBus;
 use Ecotone\SymfonyBundle\EcotoneSymfonyBundle;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -40,6 +44,26 @@ class ConfiguredMessagingSystemWrapper implements ConfiguredMessagingSystem
     public function run(string $endpointId, ?ExecutionPollingMetadata $executionPollingMetadata = null): void
     {
         $this->getConfiguredSystem()->run($endpointId, $executionPollingMetadata);
+    }
+
+    public function getCommandBus(): CommandBus
+    {
+        return $this->getGatewayByName(CommandBus::class);
+    }
+
+    public function getQueryBus(): QueryBus
+    {
+        return $this->getGatewayByName(QueryBus::class);
+    }
+
+    public function getEventBus(): EventBus
+    {
+        return $this->getGatewayByName(EventBus::class);
+    }
+
+    public function getDistributedBus(): DistributedBus
+    {
+        return $this->getGatewayByName(DistributedBus::class);
     }
 
     public function list(): array
