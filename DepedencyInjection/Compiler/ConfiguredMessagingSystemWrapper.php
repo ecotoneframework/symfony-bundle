@@ -5,11 +5,13 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Ecotone\Messaging\Endpoint\ExecutionPollingMetadata;
 use Ecotone\Messaging\MessageChannel;
+use Ecotone\Messaging\Support\Assert;
 use Ecotone\Modelling\CommandBus;
 use Ecotone\Modelling\DistributedBus;
 use Ecotone\Modelling\EventBus;
 use Ecotone\Modelling\QueryBus;
 use Ecotone\SymfonyBundle\EcotoneSymfonyBundle;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Container;
 
 class ConfiguredMessagingSystemWrapper implements ConfiguredMessagingSystem
@@ -44,6 +46,13 @@ class ConfiguredMessagingSystemWrapper implements ConfiguredMessagingSystem
     public function run(string $endpointId, ?ExecutionPollingMetadata $executionPollingMetadata = null): void
     {
         $this->getConfiguredSystem()->run($endpointId, $executionPollingMetadata);
+    }
+
+    public function getServiceFromContainer(string $referenceName): object
+    {
+        Assert::isTrue($this->container->has($referenceName), "Service with reference {$referenceName} does not exists");
+
+        return $this->container->get($referenceName);
     }
 
     public function getCommandBus(): CommandBus
