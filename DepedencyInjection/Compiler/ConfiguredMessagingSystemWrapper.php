@@ -5,6 +5,7 @@ namespace Ecotone\SymfonyBundle\DepedencyInjection\Compiler;
 use Ecotone\Messaging\Config\ConfiguredMessagingSystem;
 use Ecotone\Messaging\Endpoint\ExecutionPollingMetadata;
 use Ecotone\Messaging\MessageChannel;
+use Ecotone\Messaging\MessagePublisher;
 use Ecotone\Messaging\Support\Assert;
 use Ecotone\Modelling\CommandBus;
 use Ecotone\Modelling\DistributedBus;
@@ -73,6 +74,11 @@ class ConfiguredMessagingSystemWrapper implements ConfiguredMessagingSystem
     public function getDistributedBus(): DistributedBus
     {
         return $this->getGatewayByName(DistributedBus::class);
+    }
+
+    public function getMessagePublisher(string $referenceName = MessagePublisher::class): MessagePublisher
+    {
+        return $this->getGatewayByName($referenceName);
     }
 
     public function list(): array
