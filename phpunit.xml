@@ -22,6 +22,9 @@
         timeoutForLargeTests="60"
         verbose="false"
 >
+    <php>
+        <server name="KERNEL_CLASS" value="Ecotone\SymfonyBundle\App\Kernel" />
+    </php>
     <testsuites>
         <testsuite name="Unit Tests">
             <directory>tests/phpunit</directory>
