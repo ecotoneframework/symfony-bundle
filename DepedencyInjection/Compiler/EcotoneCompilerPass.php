@@ -12,11 +12,9 @@ use Ecotone\Messaging\ConfigurationVariableService;
 use Ecotone\Messaging\Conversion\ConversionService;
 use Ecotone\Messaging\Gateway\ConsoleCommandRunner;
 use Ecotone\Messaging\Handler\ChannelResolver;
-use Ecotone\Messaging\Handler\ExpressionEvaluationService;
 use Ecotone\Messaging\Handler\Gateway\GatewayProxyBuilder;
 use Ecotone\Messaging\Handler\Recoverability\RetryTemplateBuilder;
 use Ecotone\Messaging\Handler\ReferenceSearchService;
-use Ecotone\Messaging\Handler\SymfonyExpressionEvaluationAdapter;
 use Ecotone\SymfonyBundle\DepedencyInjection\MessagingEntrypointCommand;
 use Ecotone\SymfonyBundle\MessagingSystemFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -25,7 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class EcotoneCompilerPass implements CompilerPassInterface
 {
@@ -181,24 +178,5 @@ class EcotoneCompilerPass implements CompilerPassInterface
         $definition->setPublic(true);
         $definition->setFactory(new Reference(MessagingSystemFactory::class));
         $container->setDefinition(ConfiguredMessagingSystem::class, $definition);
-
-        $this->setUpExpressionLanguage($container);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @return void
-     */
-    private function setUpExpressionLanguage(ContainerBuilder $container): void
-    {
-        if (! class_exists(ExpressionLanguage::class)) {
-            return;
-        }
-
-        $definition = new Definition();
-        $definition->setClass(SymfonyExpressionEvaluationAdapter::class);
-        $definition->setFactory([SymfonyExpressionEvaluationAdapter::class, 'create']);
-        $definition->setPublic(true);
-        $container->setDefinition(ExpressionEvaluationService::REFERENCE, $definition);
     }
 }
