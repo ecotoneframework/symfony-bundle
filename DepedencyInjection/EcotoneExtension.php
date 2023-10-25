@@ -8,7 +8,6 @@ use Ecotone\Messaging\Config\ModulePackageList;
 use Ecotone\Messaging\Config\ServiceCacheConfiguration;
 use Ecotone\Messaging\Config\ServiceConfiguration;
 use Ecotone\Messaging\Gateway\ConsoleCommandRunner;
-use Ecotone\Messaging\Handler\Gateway\ProxyFactory;
 use Ecotone\Messaging\Handler\Recoverability\RetryTemplateBuilder;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\CacheWarmer;
 use Ecotone\SymfonyBundle\DepedencyInjection\Compiler\SymfonyConfigurationVariableService;
@@ -36,7 +35,6 @@ class EcotoneExtension extends Extension
             ->withLoadCatalog($config['loadSrcNamespaces'] ? 'src' : '')
             ->withNamespaces($config['namespaces'])
             ->withSkippedModulePackageNames($skippedModules)
-            ->withCacheDirectoryPath($container->getParameter('kernel.cache_dir'))
         ;
 
         if (isset($config['serviceName'])) {
@@ -70,9 +68,11 @@ class EcotoneExtension extends Extension
 
         $configurationVariableService = new SymfonyConfigurationVariableService($container);
 
-        $container->register(ProxyFactory::class)
-            ->setPublic(true)
-            ->setArguments([new Reference(ServiceCacheConfiguration::REFERENCE_NAME)]);
+        $container->register(ServiceCacheConfiguration::REFERENCE_NAME, ServiceCacheConfiguration::class)
+            ->setArguments([
+                '%kernel.cache_dir%',
+                true,
+            ]);
 
         $container->register(CacheWarmer::class)->setAutowired(true)->addTag('kernel.cache_warmer');
 
