@@ -21,6 +21,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * @internal
  */
+/**
+ * licence Apache-2.0
+ * @internal
+ */
 final class MessengerIntegrationTest extends WebTestCase
 {
     public function setUp(): void

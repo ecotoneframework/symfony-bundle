@@ -9,6 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 /**
  * @internal
  */
+/**
+ * licence Apache-2.0
+ * @internal
+ */
 class SymfonyApplicationTest extends KernelTestCase
 {
     public function test_it_boots_kernel_with_test_support(): void

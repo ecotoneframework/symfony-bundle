@@ -17,6 +17,10 @@ use Symfony\Component\Messenger\Envelope;
 /**
  * @internal
  */
+/**
+ * licence Apache-2.0
+ * @internal
+ */
 class SymfonyMessengerMessageChannelUnitTest extends TestCase
 {
     private SymfonyMessageConverter $messageConverter;
