@@ -26,6 +26,7 @@ class EcotoneExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+        $config = $container->resolveEnvPlaceholders($config, true);
 
         $skippedModules = $config['skippedModulePackageNames'] ?? [];
         if (! $config['test']) {
