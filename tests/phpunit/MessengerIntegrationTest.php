@@ -31,7 +31,8 @@ final class MessengerIntegrationTest extends WebTestCase
     {
         try {
             self::bootKernel()->getContainer()->get('Doctrine\DBAL\Connection-public')->executeQuery('DELETE FROM messenger_messages');
-        } catch (Exception) {
+        } catch (Exception $exception) {
+
         }
     }
 
