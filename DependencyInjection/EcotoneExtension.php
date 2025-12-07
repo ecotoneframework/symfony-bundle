@@ -110,5 +110,7 @@ class EcotoneExtension extends Extension
 
             $container->setDefinition($oneTimeCommandConfiguration->getChannelName(), $definition);
         }
+
+        $container->setParameter('ecotone.messaging_system_configuration.required_references', $messagingConfiguration->getRequiredReferencesForValidation());
     }
 }
