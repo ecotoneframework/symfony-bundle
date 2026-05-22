@@ -17,17 +17,22 @@
     ],
     "keywords": [
         "symfony",
+        "symfony-bundle",
+        "symfony-messenger",
         "ecotone",
         "ddd",
+        "cqrs",
+        "event-sourcing",
+        "sagas",
+        "durable-workflows",
+        "workflow",
+        "outbox",
         "messaging",
-        "message",
-        "enterprise integration patterns",
-        "eip",
-        "distributed architecture"
+        "eip"
     ],
-    "description": "Ecotone for Symfony — CQRS, Event Sourcing, Sagas, and Workflows on top of Symfony Messenger, via PHP attributes.",
+    "description": "Ecotone for Symfony — CQRS, Event Sourcing, Sagas, Durable Workflows, and Outbox on top of Symfony Messenger, via PHP attributes.",
     "require": {
-        "ecotone/ecotone": "~1.313.1",
+        "ecotone/ecotone": "~1.313.2",
         "symfony/console": "^6.4|^7.0|^8.0",
         "symfony/dependency-injection": "^6.4|^7.0|^8.0",
         "symfony/framework-bundle": "^6.4|^7.0|^8.0"
@@ -35,7 +40,7 @@
     "require-dev": {
         "doctrine/doctrine-bundle": "^2.7.2",
         "doctrine/orm": "^2.11|^3.0",
-        "ecotone/dbal": "~1.313.1",
+        "ecotone/dbal": "~1.313.2",
         "monolog/monolog": "^2.9|^3.3.1",
         "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^10.5|^11.0",
@@ -83,7 +88,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "1.313.1-dev"
+            "dev-main": "1.313.2-dev"
         },
         "ecotone": {
             "repository": "symfony"
@@ -99,6 +104,6 @@
                 "description": "Allows to use Enterprise features of Ecotone. For more information please write to support@simplycodedsoftware.com"
             }
         },
-        "release-time": "2026-05-18 19:18:46"
+        "release-time": "2026-05-22 17:45:28"
     }
 }
