@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Ecotone\SymfonyBundle\Config;
+namespace Ecotone\Api\Symfony;
 
-use Ecotone\Messaging\Config\ConnectionReference;
+use Ecotone\Api\Dbal\ExtensionObject\DbalConnectionReference;
+use Ecotone\Api\ExtensionObject\ConnectionReference;
 use Ecotone\Messaging\Config\Container\DefinedObject;
 use Ecotone\Messaging\Config\Container\Definition;
 use Ecotone\Messaging\Support\Assert;
-use Enqueue\Dbal\DbalConnectionFactory;
+use Ecotone\SymfonyBundle\Config\SymfonyConnectionDbalGuard;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -19,9 +20,9 @@ final class SymfonyConnectionReference extends ConnectionReference implements De
     private function __construct(
         private string $referenceName,
         private ?string $managerRegistryReference,
-        private ?string $connectionName,
+        ?string $connectionName,
     ) {
-        parent::__construct($referenceName, $this->connectionName);
+        parent::__construct($referenceName, $connectionName);
     }
 
     public static function createForManagerRegistry(
@@ -49,17 +50,21 @@ final class SymfonyConnectionReference extends ConnectionReference implements De
         string $connectionName,
         string $managerRegistryReference = 'doctrine',
     ): self {
+        SymfonyConnectionDbalGuard::assertDbalInstalledFor("SymfonyConnectionReference::defaultManagerRegistry('{$connectionName}')");
+
         return self::createForManagerRegistry(
             $connectionName,
             $managerRegistryReference,
-            DbalConnectionFactory::class,
+            DbalConnectionReference::DEFAULT,
         );
     }
 
     public static function defaultConnection(string $connectionName)
     {
+        SymfonyConnectionDbalGuard::assertDbalInstalledFor("SymfonyConnectionReference::defaultConnection('{$connectionName}')");
+
         return new self(
-            DbalConnectionFactory::class,
+            DbalConnectionReference::DEFAULT,
             null,
             $connectionName,
         );

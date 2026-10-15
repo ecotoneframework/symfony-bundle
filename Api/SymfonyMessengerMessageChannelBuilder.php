@@ -2,22 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Ecotone\SymfonyBundle\Messenger;
+namespace Ecotone\Api\Symfony;
 
-use Ecotone\Messaging\Channel\MessageChannelBuilder;
+use Ecotone\Api\ExtensionObject\FinalFailureStrategy;
+use Ecotone\Api\ExtensionObject\MessageChannelBuilder;
 use Ecotone\Messaging\Config\Container\Definition;
 use Ecotone\Messaging\Config\Container\MessagingContainerBuilder;
 use Ecotone\Messaging\Config\Container\Reference;
 use Ecotone\Messaging\Conversion\ConversionService;
-use Ecotone\Messaging\Endpoint\FinalFailureStrategy;
 use Ecotone\Messaging\MessageConverter\DefaultHeaderMapper;
 use Ecotone\Messaging\MessageConverter\HeaderMapper;
 use Ecotone\Messaging\Support\Assert;
+use Ecotone\SymfonyBundle\Messenger\SymfonyAcknowledgementCallback;
+use Ecotone\SymfonyBundle\Messenger\SymfonyMessageConverter;
+use Ecotone\SymfonyBundle\Messenger\SymfonyMessengerMessageChannel;
 
-/**
- * Symfony Channel does not implement MessageChannelWithSerializationBuilder to avoid
- * using PollableChannelSerializationModule, as serialization is done on the symfony transport layer instead.
- */
 /**
  * licence Apache-2.0
  */
@@ -52,7 +51,6 @@ final class SymfonyMessengerMessageChannelBuilder implements MessageChannelBuild
     }
 
     /**
-     * @param string $headerMapper
      * @return static
      */
     public function withHeaderMapping(string $headerMapper): self
@@ -88,10 +86,6 @@ final class SymfonyMessengerMessageChannelBuilder implements MessageChannelBuild
         );
     }
 
-    /**
-     * Whatever messages are preserved after consumption, and be consumed by multiple consumer groups
-     * @return string
-     */
     public function isStreamingChannel(): bool
     {
         return false;
