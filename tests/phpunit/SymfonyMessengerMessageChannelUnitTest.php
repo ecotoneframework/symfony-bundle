@@ -2,14 +2,13 @@
 
 namespace Test;
 
-use Ecotone\Api\Messaging\Message;
 use Ecotone\Messaging\Conversion\ConversionService;
+use Ecotone\Messaging\Message;
 use Ecotone\Messaging\MessageConverter\HeaderMapper;
-use Ecotone\Messaging\Scheduling\NativeClock;
-use Ecotone\Messaging\Support\MessageBuilder;
 use Ecotone\SymfonyBundle\Messenger\MetadataStamp;
 use Ecotone\SymfonyBundle\Messenger\SymfonyMessageConverter;
 use Ecotone\SymfonyBundle\Messenger\SymfonyMessengerMessageChannel;
+use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpTransport;
@@ -28,13 +27,18 @@ class SymfonyMessengerMessageChannelUnitTest extends TestCase
     private SymfonyMessageConverter $messageConverter;
     private Envelope $envelope;
 
+    #[After]
+    public function internalDisableErrorHandler(): void
+    {
+        restore_exception_handler();
+    }
+
     public function setUp(): void
     {
         $this->messageConverter = new SymfonyMessageConverter(
             $this->createStub(HeaderMapper::class),
             'mode',
-            $this->createStub(ConversionService::class),
-            new MessageBuilder(new NativeClock()),
+            $this->createStub(ConversionService::class)
         );
         $this->envelope = new Envelope(
             $this->createStub(stdClass::class),

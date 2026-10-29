@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Ecotone\Api\Lite\EcotoneLite;
+use Ecotone\Lite\EcotoneLite;
 use Ecotone\Lite\Test\Configuration\InMemoryRepositoryBuilder;
+use Ecotone\Messaging\Config\ModulePackageList;
+use Ecotone\Messaging\Config\ServiceConfiguration;
 use Fixture\ExpressionLanguage\ExpressionLanguageCommandHandler;
 use Fixture\User\User;
 use Fixture\User\UserRepository;
@@ -31,12 +33,16 @@ final class EcotoneLiteWithSymfonyContainerTest extends KernelTestCase
         $ecotoneTestSupport = EcotoneLite::bootstrapFlowTesting(
             [User::class, UserRepository::class, UserService::class],
             $this->bootKernel()->getContainer(),
-            extensionObjects: [InMemoryRepositoryBuilder::createForAllStateStoredAggregates()],
-            enabledModules: [],
+            ServiceConfiguration::createWithDefaults()
+                ->doNotLoadCatalog()
+                ->withExtensionObjects([
+                    InMemoryRepositoryBuilder::createForAllStateStoredAggregates(),
+                ])
+                ->withSkippedModulePackageNames(ModulePackageList::allPackages())
         );
 
         $userId = '123';
-        $ecotoneTestSupport->sendCommandWithRouting('user.register', $userId);
+        $ecotoneTestSupport->sendCommandWithRoutingKey('user.register', $userId);
 
         /** @var UserRepository $userRepository */
         $userRepository = $ecotoneTestSupport->getGateway(UserRepository::class);
@@ -49,14 +55,16 @@ final class EcotoneLiteWithSymfonyContainerTest extends KernelTestCase
         $ecotoneTestSupport = EcotoneLite::bootstrapFlowTesting(
             [ExpressionLanguageCommandHandler::class],
             $this->bootKernel()->getContainer(),
-            enabledModules: [],
+            ServiceConfiguration::createWithDefaults()
+                ->doNotLoadCatalog()
+                ->withSkippedModulePackageNames(ModulePackageList::allPackages())
         );
 
         $amount = 123;
         $this->assertEquals(
             $amount,
             $ecotoneTestSupport
-                ->sendCommandWithRouting('setAmount', ['amount' => $amount])
+                ->sendCommandWithRoutingKey('setAmount', ['amount' => $amount])
                 ->sendQueryWithRouting('getAmount')
         );
         ;

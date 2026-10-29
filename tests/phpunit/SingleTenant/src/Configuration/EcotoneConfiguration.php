@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Symfony\App\SingleTenant\Configuration;
 
-use Ecotone\Api\Attribute\ServiceContext;
-use Ecotone\Api\Dbal\ExtensionObject\DbalConfiguration;
-use Ecotone\Api\Dbal\ExtensionObject\DbalDeadLetterBuilder;
-use Ecotone\Api\ExtensionObject\InstantRetryConfiguration;
-use Ecotone\Api\ExtensionObject\PollingMetadata;
-use Ecotone\Api\Symfony\SymfonyConnectionReference;
-use Ecotone\Api\Symfony\SymfonyMessengerMessageChannelBuilder;
+use Ecotone\Dbal\Configuration\DbalConfiguration;
+use Ecotone\Dbal\Recoverability\DbalDeadLetterBuilder;
+use Ecotone\Messaging\Attribute\ServiceContext;
+use Ecotone\Messaging\Endpoint\PollingMetadata;
+use Ecotone\SymfonyBundle\Config\SymfonyConnectionReference;
+use Ecotone\SymfonyBundle\Messenger\SymfonyMessengerMessageChannelBuilder;
 
 /**
  * licence Apache-2.0
@@ -21,12 +20,6 @@ final class EcotoneConfiguration
     public function multiTenantConfiguration(): SymfonyConnectionReference
     {
         return SymfonyConnectionReference::defaultManagerRegistry('defined_connection');
-    }
-
-    #[ServiceContext]
-    public function instantRetryConfiguration(): InstantRetryConfiguration
-    {
-        return InstantRetryConfiguration::createWithDefaults()->withAsynchronousEndpointsRetry(false);
     }
 
     #[ServiceContext]
@@ -47,8 +40,8 @@ final class EcotoneConfiguration
     public function notificationPollingMetadata(): PollingMetadata
     {
         return PollingMetadata::create('notifications')
-            ->withExecutionTimeLimitInMilliseconds(1000)
-            ->withHandledMessageLimit(10)
-            ->withErrorChannelName(DbalDeadLetterBuilder::STORE_CHANNEL);
+            ->setExecutionTimeLimitInMilliseconds(1000)
+            ->setHandledMessageLimit(10)
+            ->setErrorChannelName(DbalDeadLetterBuilder::STORE_CHANNEL);
     }
 }

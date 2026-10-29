@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Symfony\App\EnvPlaceholderEndpoint;
 
-use Ecotone\Api\Attribute\Asynchronous;
-use Ecotone\Api\Attribute\CommandHandler;
-use Ecotone\Api\Attribute\ErrorChannel;
+use Ecotone\Messaging\Attribute\Asynchronous;
+use Ecotone\Messaging\Attribute\ErrorChannel;
+use Ecotone\Modelling\Attribute\CommandHandler;
 
 /**
  * licence Apache-2.0

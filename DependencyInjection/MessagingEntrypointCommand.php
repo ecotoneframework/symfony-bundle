@@ -2,8 +2,8 @@
 
 namespace Ecotone\SymfonyBundle\DependencyInjection;
 
-use Ecotone\Api\Console\ConsoleCommandResultSet;
 use Ecotone\Messaging\Config\ConsoleCommandParameter;
+use Ecotone\Messaging\Config\ConsoleCommandResultSet;
 use Ecotone\Messaging\Console\DelegatingConsoleWriter;
 use Ecotone\Messaging\Console\SymfonyConsoleWriter;
 use Ecotone\Messaging\Gateway\ConsoleCommandRunner;
@@ -25,6 +25,9 @@ class MessagingEntrypointCommand extends Command
     private DelegatingConsoleWriter $consoleWriter;
     private string $commandDescription;
 
+    /**
+     * @var ConsoleCommandParameter[] $parameters
+     */
     public function __construct(string $name, string $parameters, ConsoleCommandRunner $consoleCommandRunner, DelegatingConsoleWriter $consoleWriter, string $commandDescription = '')
     {
         $this->name = $name;
@@ -71,7 +74,7 @@ class MessagingEntrypointCommand extends Command
         );
 
         if ($result) {
-            $writer->table($result->columnHeaders, $result->rows);
+            $writer->table($result->getColumnHeaders(), $result->getRows());
         }
 
         return 0;

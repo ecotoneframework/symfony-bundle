@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Ecotone\SymfonyBundle\Messenger;
 
 use DateTimeInterface;
-use Ecotone\Api\ExtensionObject\FinalFailureStrategy;
-use Ecotone\Api\ExtensionObject\MediaType;
-use Ecotone\Api\Messaging\Message;
-use Ecotone\Api\Messaging\MessageHeaders;
-use Ecotone\Api\Scheduling\DatePoint;
-use Ecotone\Api\Scheduling\Duration;
-use Ecotone\Api\Scheduling\TimeSpan;
 use Ecotone\Messaging\Conversion\ConversionService;
+use Ecotone\Messaging\Conversion\MediaType;
+use Ecotone\Messaging\Endpoint\FinalFailureStrategy;
 use Ecotone\Messaging\Handler\Type;
+use Ecotone\Messaging\Message;
 use Ecotone\Messaging\MessageConverter\HeaderMapper;
-use Ecotone\Messaging\Support\FrameworkHeaders;
+use Ecotone\Messaging\MessageHeaders;
+use Ecotone\Messaging\Scheduling\DatePoint;
+use Ecotone\Messaging\Scheduling\Duration;
+use Ecotone\Messaging\Scheduling\TimeSpan;
 use Ecotone\Messaging\Support\MessageBuilder;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
@@ -32,7 +31,6 @@ final class SymfonyMessageConverter
         private HeaderMapper $headerMapper,
         private string $acknowledgeMode,
         private ConversionService $conversionService,
-        private MessageBuilder $messageBuilder,
         private FinalFailureStrategy $finalFailureStrategy = FinalFailureStrategy::RESEND
     ) {
 
@@ -41,7 +39,7 @@ final class SymfonyMessageConverter
     public function convertToSymfonyMessage(Message $message, bool $withDelay): Envelope
     {
         $payload = $message->getPayload();
-        $headers = FrameworkHeaders::unsetEnqueueMetadata($message->getHeaders()->headers());
+        $headers = MessageHeaders::unsetEnqueueMetadata($message->getHeaders()->headers());
         $headers = $this->headerMapper->mapFromMessageHeaders($headers, $this->conversionService);
 
         $type = Type::createFromVariable($payload);
@@ -100,7 +98,7 @@ final class SymfonyMessageConverter
         if ($payload instanceof WrappedPayload) {
             $payload = $payload->getPayload();
         }
-        $messageBuilder = $this->messageBuilder->withPayload($payload)
+        $messageBuilder = MessageBuilder::withPayload($payload)
             ->setMultipleHeaders($this->headerMapper->mapToMessageHeaders($headers, $this->conversionService));
 
         if (array_key_exists(MessageHeaders::CONTENT_TYPE, $headers)) {

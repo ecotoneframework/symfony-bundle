@@ -33,5 +33,12 @@ framework:
 ecotone:
     namespaces:
         - "Fixture"
+    defaultMemoryLimit: 256
+    defaultConnectionExceptionRetry:
+        initialDelay: 100
+        maxAttempts: 3
+        multiplier: 2
+    defaultErrorChannel: "errorChannel"
+    defaultSerializationMediaType: "application/json"
     loadSrcNamespaces: false
-    enabledModulePackageNames: ["amqp","jmsConverter"]
+    skippedModulePackageNames: ["dbal","amqp","eventSourcing","jmsConverter","tracing", "kafka"]

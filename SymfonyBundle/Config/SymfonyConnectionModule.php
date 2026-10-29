@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Ecotone\SymfonyBundle\Config;
 
 use Ecotone\AnnotationFinder\AnnotationFinder;
-use Ecotone\Api\Attribute\ModuleAnnotation;
-use Ecotone\Api\Dbal\ExtensionObject\MultiTenantConfiguration;
-use Ecotone\Api\ExtensionObject\ModulePackageList;
-use Ecotone\Api\Symfony\SymfonyConnectionReference;
 use Ecotone\Dbal\DbalConnection;
+use Ecotone\Dbal\MultiTenant\MultiTenantConfiguration;
+use Ecotone\Messaging\Attribute\ModuleAnnotation;
 use Ecotone\Messaging\Config\Annotation\AnnotationModule;
 use Ecotone\Messaging\Config\Annotation\ModuleConfiguration\ExtensionObjectResolver;
 use Ecotone\Messaging\Config\Annotation\ModuleConfiguration\NoExternalConfigurationModule;
 use Ecotone\Messaging\Config\Configuration;
 use Ecotone\Messaging\Config\Container\Definition;
 use Ecotone\Messaging\Config\Container\Reference;
+use Ecotone\Messaging\Config\ModulePackageList;
 use Ecotone\Messaging\Config\ModuleReferenceSearchService;
 use Ecotone\Messaging\Handler\InterfaceToCallRegistry;
 use Interop\Queue\ConnectionFactory;
@@ -37,17 +36,10 @@ final class SymfonyConnectionModule extends NoExternalConfigurationModule implem
     {
         $laravelRelatedMultiTenantConfigurations = [];
         $symfonyConnections = ExtensionObjectResolver::resolve(SymfonyConnectionReference::class, $extensionObjects);
-        foreach ($symfonyConnections as $connection) {
-            SymfonyConnectionDbalGuard::assertDbalInstalledFor(
-                $connection->isManagerRegistryBasedConnection()
-                    ? "SymfonyConnectionReference::createForManagerRegistry('{$connection->connectionName}')"
-                    : "SymfonyConnectionReference::createForConnection('{$connection->connectionName}')"
-            );
-        }
         $multiTenantConfigurations = ExtensionObjectResolver::resolve(MultiTenantConfiguration::class, $extensionObjects);
 
         foreach ($multiTenantConfigurations as $multiTenantConfiguration) {
-            foreach ($multiTenantConfiguration->tenantToConnectionMapping as $connectionReference) {
+            foreach ($multiTenantConfiguration->getTenantToConnectionMapping() as $connectionReference) {
                 if ($connectionReference instanceof SymfonyConnectionReference) {
                     $symfonyConnections[] = $connectionReference;
                     $laravelRelatedMultiTenantConfigurations[$multiTenantConfiguration->getReferenceName()] = $multiTenantConfiguration;
@@ -64,7 +56,7 @@ final class SymfonyConnectionModule extends NoExternalConfigurationModule implem
                         ConnectionFactory::class,
                         [
                             Reference::to($connection->getManagerRegistryReference()),
-                            $connection->connectionName,
+                            $connection->getConnectionName(),
                         ],
                         [
                             DbalConnection::class,
@@ -79,7 +71,7 @@ final class SymfonyConnectionModule extends NoExternalConfigurationModule implem
                     new Definition(
                         ConnectionFactory::class,
                         [
-                            $connection->connectionName,
+                            $connection->getConnectionName(),
                         ],
                         [
                             'doctrine',
